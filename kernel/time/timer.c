@@ -2460,6 +2460,7 @@ static void run_local_timers(void)
 			return;
 		}
 	}
+	raise_timer_softirq();
 }
 
 /*
