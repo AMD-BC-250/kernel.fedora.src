@@ -1,3 +1,9 @@
+* Wed Jan 25 2023 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.2.0-0.rc5.948ef7bb70c4.40]
+- Turn on debug builds for aarch64 Fedora (Justin M. Forbes)
+- Turn off forced debug builds (Justin M. Forbes)
+- Revert "redhat: fix elf got hardening for vm tools" (Don Zickus)
+Resolves: 
+
 * Wed Jan 25 2023 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.2.0-0.rc5.948ef7bb70c4.39]
 - gitlab-ci: use CI templates from production branch (Michael Hofmann)
 - Linux v6.2.0-0.rc5.948ef7bb70c4
