@@ -1,3 +1,9 @@
+* Thu Jan 26 2023 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.2.0-0.rc5.7c46948a6e9c.41]
+- Turn on debug builds for aarch64 Fedora (Justin M. Forbes)
+- Turn off forced debug builds (Justin M. Forbes)
+- Revert "redhat: fix elf got hardening for vm tools" (Don Zickus)
+Resolves: 
+
 * Thu Jan 26 2023 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.2.0-0.rc5.7c46948a6e9c.40]
 - redhat/self-test: Update data with ENABLE_WERROR (Prarit Bhargava)
 - redhat/Makefile.variables: Add ENABLE_WERROR (Prarit Bhargava)
