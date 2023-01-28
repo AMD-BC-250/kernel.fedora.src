@@ -1,3 +1,10 @@
+* Sat Jan 28 2023 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.2.0-0.rc5.5af6ce704936.42]
+- Update self-test data to not expect debugbuildsenabled 0 (Justin M. Forbes)
+- Turn off forced debug builds (Justin M. Forbes)
+- Turn on debug builds for aarch64 Fedora (Justin M. Forbes)
+- Revert "redhat: fix elf got hardening for vm tools" (Don Zickus)
+Resolves: 
+
 * Sat Jan 28 2023 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.2.0-0.rc5.5af6ce704936.41]
 - redhat/configs: Turn on CONFIG_SPI_TEGRA210_QUAD for RHEL (Mark Salter)
 - ark: aarch64: drop CONFIG_SMC911X (Peter Robinson)
