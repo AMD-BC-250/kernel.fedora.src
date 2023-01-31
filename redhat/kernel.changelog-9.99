@@ -1,3 +1,10 @@
+* Tue Jan 31 2023 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.2.0-0.rc6.22b8077d0fce.45]
+- Update self-test data to not expect debugbuildsenabled 0 (Justin M. Forbes)
+- Turn off forced debug builds (Justin M. Forbes)
+- Turn on debug builds for aarch64 Fedora (Justin M. Forbes)
+- Revert "redhat: fix elf got hardening for vm tools" (Don Zickus)
+Resolves: 
+
 * Tue Jan 31 2023 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.2.0-0.rc6.22b8077d0fce.44]
 - Linux v6.2.0-0.rc6.22b8077d0fce
 Resolves: 
