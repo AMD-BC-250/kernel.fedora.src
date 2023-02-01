@@ -1,3 +1,10 @@
+* Wed Feb 01 2023 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.2.0-0.rc6.c0b67534c95c.46]
+- Update self-test data to not expect debugbuildsenabled 0 (Justin M. Forbes)
+- Turn off forced debug builds (Justin M. Forbes)
+- Turn on debug builds for aarch64 Fedora (Justin M. Forbes)
+- Revert "redhat: fix elf got hardening for vm tools" (Don Zickus)
+Resolves: 
+
 * Wed Feb 01 2023 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.2.0-0.rc6.c0b67534c95c.45]
 - Update rebase notes for Fedora (Justin M. Forbes)
 - Update CONFIG_LOCKDEP_CHAINS_BITS to 19 (cmurf)
