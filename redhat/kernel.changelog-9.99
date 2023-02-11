@@ -1,3 +1,7 @@
+* Sat Feb 11 2023 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.2.0-0.rc7.420b2d431d18.55]
+- Disable frame pointers (Justin M. Forbes)
+Resolves: 
+
 * Sat Feb 11 2023 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.2.0-0.rc7.420b2d431d18.54]
 - Fedora configs for 6.2 (Justin M. Forbes)
 - Linux v6.2.0-0.rc7.420b2d431d18
