@@ -1,3 +1,7 @@
+* Sun Feb 26 2023 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.3.0-0.rc0.2fcd07b7ccd5.8]
+- Add more kunit tests to mod-internal.list for 6.3 (Justin M. Forbes)
+Resolves: 
+
 * Sun Feb 26 2023 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.3.0-0.rc0.2fcd07b7ccd5.7]
 - Linux v6.3.0-0.rc0.2fcd07b7ccd5
 Resolves: 
