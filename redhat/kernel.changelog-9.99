@@ -1,3 +1,8 @@
+* Mon Mar 06 2023 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.3.0-0.rc1.16]
+- Add rtla-hwnoise files (Justin M. Forbes)
+- redhat/kernel.spec.template: Fix RHEL systemd-boot-unsigned dependency for RHEL (Prarit Bhargava)
+Resolves: 
+
 * Mon Mar 06 2023 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.3.0-0.rc1.15]
 - redhat/configs: CONFIG_HP_ILO location fix (Vladis Dronov)
 - Linux v6.3.0-0.rc1
