@@ -1,3 +1,7 @@
+* Tue Mar 07 2023 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.3.0-0.rc1.8ca09d5fa354.17]
+- redhat/kernel.spec.template: Fix RHEL systemd-boot-unsigned dependency for RHEL (Prarit Bhargava)
+Resolves: 
+
 * Tue Mar 07 2023 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.3.0-0.rc1.8ca09d5fa354.16]
 - redhat/Makefile: fix default values for dist-brew's DISTRO and DIST (Íñigo Huguet)
 - Remove cc lines from automatic configs (Don Zickus)
