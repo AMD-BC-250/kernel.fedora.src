@@ -1,3 +1,7 @@
+* Sat Mar 11 2023 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.3.0-0.rc1.ef5f68cc1f82.21]
+- redhat: version two of Makefile.rhelver tweaks (Clark Williams)
+Resolves: 
+
 * Sat Mar 11 2023 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.3.0-0.rc1.ef5f68cc1f82.20]
 - Linux v6.3.0-0.rc1.ef5f68cc1f82
 Resolves: 
