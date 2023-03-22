@@ -1,3 +1,7 @@
+* Wed Mar 22 2023 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.3.0-0.rc3.a1effab7a3a3.31]
+- kasan, powerpc: Don't rename memintrinsics if compiler adds prefixes (Marco Elver)
+Resolves: 
+
 * Wed Mar 22 2023 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.3.0-0.rc3.a1effab7a3a3.30]
 - arm64/configs: Put some arm64 configs in the right place (Mark Salter)
 - cleanup removed R8188EU config (Peter Robinson)
