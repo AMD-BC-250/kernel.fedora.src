@@ -1,3 +1,7 @@
+* Thu Mar 23 2023 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.3.0-0.rc3.fff5a5e7f528.32]
+- kasan, powerpc: Don't rename memintrinsics if compiler adds prefixes (Marco Elver)
+Resolves: 
+
 * Thu Mar 23 2023 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.3.0-0.rc3.fff5a5e7f528.31]
 - Linux v6.3.0-0.rc3.fff5a5e7f528
 Resolves: 
