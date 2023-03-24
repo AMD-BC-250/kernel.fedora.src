@@ -1,3 +1,7 @@
+* Fri Mar 24 2023 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.3.0-0.rc3.1e760fa3596e.33]
+- kasan, powerpc: Don't rename memintrinsics if compiler adds prefixes (Marco Elver)
+Resolves: 
+
 * Fri Mar 24 2023 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.3.0-0.rc3.1e760fa3596e.32]
 - Revert "acpi: prefer booting with ACPI over DTS" (Mark Salter)
 - Revert "Fixes "acpi: prefer booting with ACPI over DTS" to be RHEL only" (Mark Salter)
