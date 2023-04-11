@@ -125,6 +125,12 @@ RHJOBS ?=
 # considered stable and may be changed or removed without warning.
 RHSELFTESTDATA ?=
 
+# Use Gemini project versioning - $PACKAGE_NAME-A.B-C.$disttag
+# A - major that introduced this kernel
+# B - rebase number
+# C - build number (X or X.Y.Z)
+SPECGEMINI ?= 0
+
 # If set to 1, this variable will cause the kernel package build to fail if
 # the selftests fail to build.
 SPECSELFTESTS_MUST_BUILD ?= 0
@@ -143,7 +149,11 @@ UPSTREAM_BRANCH ?= master
 # If VERSION_ON_UPSTREAM is set, the versioning of the rpm package is based
 # on a branch tracking upstream. This allows for generating rpms
 # based on untagged releases.
-VERSION_ON_UPSTREAM:=1
+ifeq ($(SPECGEMINI),0)
+  VERSION_ON_UPSTREAM:=1
+else
+  VERSION_ON_UPSTREAM:=0
+endif
 
 # Builds may include a s390x+zfcpdump arch build, which results in the build
 # failing because the UTS_RELEASE field exceeded 64 chars.  This variable can

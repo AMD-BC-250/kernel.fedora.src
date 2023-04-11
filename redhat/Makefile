@@ -46,6 +46,14 @@ SPECKVERSION:=$(shell $(GIT) show $(HEAD):Makefile | sed -ne '/^VERSION\ =\ /{s/
 SPECKPATCHLEVEL:=$(shell $(GIT) show $(HEAD):Makefile | sed -ne '/^PATCHLEVEL\ =\ /{s///;p;q}')
 SPECKSUBLEVEL:=$(shell $(GIT) show $(HEAD):Makefile | sed -ne '/^SUBLEVEL\ =\ /{s///;p;q}')
 SPECKEXTRAVERSION:=$(shell $(GIT) show $(HEAD):Makefile | sed -ne '/^EXTRAVERSION\ =\ /{s///;p;q}')
+
+SPECRVERSION:=$(shell echo $$(( $(RHEL_MAJOR) - 9 )))
+SPECRPATCHLEVEL:=$(RHEL_REBASE_NUM)
+
+ifneq ($(SPECGEMINI),0)
+  SPECKEXTRAVERSION:=
+endif
+
 GITID:= $(shell $(GIT) log --max-count=1 --pretty=format:%H $(HEAD))
 ifndef RHSELFTESTDATA
   BUILD:=$(RHEL_RELEASE)
@@ -218,13 +226,21 @@ endif
 # This can be evaluated as
 #
 # $(SPECPACKAGE_NAME)-$(SPECKVERSION).$(SPECKPATCHLEVEL).$(SPECKSUBLEVEL)-$(SPECBUILD)          $(DIST)
-# $(SPECPACKAGE_NAME)-$(SPECVERSION)                                     -$(SPECBUILD)          $(DIST)
+# $(SPECPACKAGE_NAME)-$(SPECRPMVERSION)                                  -$(SPECBUILD)          $(DIST)
 # $(SPECPACKAGE_NAME)-$(BASEVERSION)                                                            $(DIST)
 # $(RELEASETAG)                                                                             $(DIST)
 #
+# Gemini kernels override RPM NVR to:
+# $(SPECPACKAGE_NAME)-$(SPECRVERSION).$(SPECRPATCHLEVEL)-$(SPECBUILD)                           $(DIST)
+#
 SPECBUILD:=$(UPSTREAMBUILD)$(BUILD)$(DISTLOCALVERSION)
 SPECVERSION:=$(SPECKVERSION).$(SPECKPATCHLEVEL).$(SPECKSUBLEVEL)
-BASEVERSION:=$(SPECVERSION)-$(SPECBUILD)
+ifeq ($(SPECGEMINI),0)
+  SPECRPMVERSION:=$(SPECKVERSION).$(SPECKPATCHLEVEL).$(SPECKSUBLEVEL)
+else
+  SPECRPMVERSION:=$(SPECRVERSION).$(SPECRPATCHLEVEL)
+endif
+BASEVERSION:=$(SPECRPMVERSION)-$(SPECBUILD)
 RELEASETAG:=$(SPECPACKAGE_NAME)-$(BASEVERSION)
 SRPM:=$(SRPMS)/$(RELEASETAG)$(DIST).src.rpm
 
@@ -241,7 +257,7 @@ ifeq ("$(DISTRO)", "fedora")
   # replace the tarball from one with upstream, rebuild, and then deploy
   # without changing anything else in the specfile.
   SPECTARFILE_RELEASE:=$(UPSTREAM_TARBALL_NAME)
-  SPECKABIVERSION:=$(SPECVERSION)
+  SPECKABIVERSION:=$(SPECRPMVERSION)
   DISTRELEASETAG:=$(RELEASETAG)
   DISTBASEVERSION:=$(BASEVERSION)
   RHPKG_BIN:=fedpkg
@@ -503,11 +519,11 @@ dist-kabi-dw-check: dist-kabi
 
 dist-configs-commit: dist-configs-prep
 	+@cd $(REDHAT)/configs; ./generate_all_configs.sh 1;\
-	./process_configs.sh -z "$(SPECVERSION)" "$(FLAVOR)"
+	./process_configs.sh -z "$(SPECRPMVERSION)" "$(FLAVOR)"
 
 dist-configs: dist-configs-prep
 	+@cd $(REDHAT)/configs; ./generate_all_configs.sh 1;\
-	./process_configs.sh $(PROCESS_CONFIGS_OPTS) "$(SPECVERSION)" ""
+	./process_configs.sh $(PROCESS_CONFIGS_OPTS) "$(SPECRPMVERSION)" ""
 
 dist-fedora-configs: FLAVOR = fedora
 dist-fedora-configs: dist-configs
