@@ -1,3 +1,9 @@
+* Mon Apr 24 2023 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.3.0-63]
+- redhat/Makefile: Support building linux-next (Thorsten Leemhuis)
+- redhat/Makefile: support building stable-rc versions (Thorsten Leemhuis)
+- redhat/Makefile: Add target to print DISTRELEASETAG (Thorsten Leemhuis)
+Resolves: 
+
 * Mon Apr 24 2023 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.3.0-62]
 - Linux v6.3.0
 Resolves: 
