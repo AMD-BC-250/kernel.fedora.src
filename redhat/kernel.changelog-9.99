@@ -1,3 +1,9 @@
+* Tue Apr 25 2023 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.4.0-0.rc0.173ea743bf7a.3]
+- redhat/Makefile: Support building linux-next (Thorsten Leemhuis)
+- redhat/Makefile: support building stable-rc versions (Thorsten Leemhuis)
+- redhat/Makefile: Add target to print DISTRELEASETAG (Thorsten Leemhuis)
+Resolves: 
+
 * Tue Apr 25 2023 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.4.0-0.rc0.173ea743bf7a.2]
 - Reset RHEL_RELEASE for the 6.4 cycle (Justin M. Forbes)
 - Fix up the RHEL configs for xtables and ipset (Justin M. Forbes)
