@@ -1,3 +1,11 @@
+* Sat Apr 29 2023 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.4.0-0.rc0.89d77f71f493.8]
+- Change FORCE_MAX_ORDER for ppc64 to be 8 (Justin M. Forbes)
+- Remove EXPERT from ARCH_FORCE_MAX_ORDER for aarch64 (Justin M. Forbes)
+- redhat/Makefile: Support building linux-next (Thorsten Leemhuis)
+- redhat/Makefile: support building stable-rc versions (Thorsten Leemhuis)
+- redhat/Makefile: Add target to print DISTRELEASETAG (Thorsten Leemhuis)
+Resolves: 
+
 * Sat Apr 29 2023 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.4.0-0.rc0.89d77f71f493.7]
 - Linux v6.4.0-0.rc0.89d77f71f493
 Resolves: 
