@@ -1,3 +1,9 @@
+* Fri May 05 2023 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.4.0-0.rc0.78b421b6a7c6.14]
+- redhat/Makefile: Support building linux-next (Thorsten Leemhuis)
+- redhat/Makefile: support building stable-rc versions (Thorsten Leemhuis)
+- redhat/Makefile: Add target to print DISTRELEASETAG (Thorsten Leemhuis)
+Resolves: 
+
 * Fri May 05 2023 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.4.0-0.rc0.78b421b6a7c6.13]
 - Remove EXPERT from ARCH_FORCE_MAX_ORDER for aarch64 (Justin M. Forbes)
 - Revert "Merge branch 'unstripped-no_alu32' into 'os-build'" (Patrick Talbert)
