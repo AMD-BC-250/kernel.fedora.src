@@ -1,3 +1,7 @@
+* Thu Jul 06 2023 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.5.0-0.rc0.c17414a273b8.12]
+- Change pathfix.py to %%py3_shebang_fix (Justin M. Forbes)
+Resolves: 
+
 * Thu Jul 06 2023 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.5.0-0.rc0.c17414a273b8.11]
 - fedira: enable pending-fedora CONFIG_CPUFREQ_DT_PLATDEV as a module (Patrick Talbert)
 - Linux v6.5.0-0.rc0.c17414a273b8
