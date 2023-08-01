@@ -7,43 +7,18 @@
 
 set -e
 
-UPSTREAM_REF=${1-master}
-PROJECT_ID=${2:-13604247}
+# source common CI functions and variables
+# shellcheck source=./redhat/scripts/ci/ark-ci-env.sh
+. "$(dirname "$0")"/ark-ci-env.sh
 
-# Detect if there's one or more prior releases for this upstream ref.
-if git describe "$UPSTREAM_REF" | grep -q -c '\-g'; then
-	SHORT_COMMIT=$(git describe "$UPSTREAM_REF" | cut -d "g" -f 2)
-	BASE_RELEASE=$(git tag -l | grep "$SHORT_COMMIT" | tail -n 1)
-else
-	if git describe "$UPSTREAM_REF" | grep -q -c "\-"; then
-		RC_LEVEL="0.$(git describe "$UPSTREAM_REF" | cut -d "-" -f 2)"
-		VERSION=$(git describe "$UPSTREAM_REF" | cut -d "-" -f 1 | cut -c 2-)
-	else
-		RC_LEVEL=""
-		VERSION=$(git describe "$UPSTREAM_REF" | cut -c 2-)
-	fi
-	BASE_RELEASE=$(git tag -l | grep -E "kernel-$VERSION\.0-$RC_LEVEL\.[0-9]+" | tail -n 1)
-fi
-if [ -n "$BASE_RELEASE" ]; then
-	printf "There's already a release for %s (tagged as %s); if you're trying \
-		to create a new release check out that tag, apply any commits you \
-		want, and then run \"touch localversion && make dist-release && make \
-		dist-release-tag\".\n" "$UPSTREAM_REF" "$BASE_RELEASE"
-	exit 3
-fi
-
-git checkout os-build
+git checkout "${BRANCH}"
 touch localversion
+old_head="$(git rev-parse HEAD)"
 make dist-release
 
-if git tag -v "$UPSTREAM_REF" > /dev/null 2>&1; then
-	git checkout -b ark/"$UPSTREAM_REF" ark/patches/"$UPSTREAM_REF"
-	RELEASE_BRANCHES=" ark/$UPSTREAM_REF ark/patches/$UPSTREAM_REF"
-else
-	# This is a snapshot release so we're only going to make a tag
-	git checkout --detach os-build && git describe
-	RELEASE_BRANCHES=""
-fi
+# prep ark-latest branch
+git checkout --detach "${BRANCH}" && git describe
+
 MR_PATCHES=$(gitlab project-merge-request list --project-id="$PROJECT_ID" \
 	--labels="Include in Releases" --state=opened | grep -v "^$" | sort | \
 	awk '{ print "https://gitlab.com/cki-project/kernel-ark/-/merge_requests/" $2 ".patch" }')
@@ -51,9 +26,18 @@ for patch_url in $MR_PATCHES; do
 	curl -sL "$patch_url" | git am
 done
 
+# if dist-release doesn't update anything, then there is a good chance the
+# tag already exists and infra changes have already been applied.  Let's
+# skip those conditions and exit gracefully.
 make dist-release
+new_head="$(git rev-parse HEAD)"
+if test "$old_head" == "$new_head"; then
+	echo "Nothing changed, skipping updates"
+	exit 0
+fi
+
 make dist-release-tag
-RELEASE=$(git describe)
+RELEASE=$(git describe) #grab the tag
 git checkout ark-latest
 git reset --hard "$RELEASE"
 
@@ -75,14 +59,16 @@ git add makefile Makefile.rhelver Makefile redhat
 
 git commit -m "bulk merge ark-infra as of $(date)"
 
-printf "All done!
+echo
+test "$TO_PUSH" && PUSH_VERB="Pushing" || PUSH_VERB="To push"
+PUSH_STR="all release artifacts"
+PUSH_CMD="git push gitlab ${BRANCH} && \\
+	git push gitlab \"${RELEASE}\" && \\
+	git push -f gitlab ark-latest && \\
+	git push -f gitlab ark-infra
+"
 
-To push all the release artifacts, run:
-
-git push os-build
-for branch in \$(git branch | grep configs/\"\$(date +%%F)\"); do
-\tgit push -o merge_request.create -o merge_request.target=os-build\
- -o merge_request.remove_source_branch upstream \"\$branch\"
-done
-git push upstream %s%s
-git push -f upstream ark-latest\n" "$RELEASE" "$RELEASE_BRANCHES"
+#Push branch
+echo "# $PUSH_VERB $PUSH_STR"
+echo "$PUSH_CMD"
+test "$TO_PUSH" && eval "$PUSH_CMD"
