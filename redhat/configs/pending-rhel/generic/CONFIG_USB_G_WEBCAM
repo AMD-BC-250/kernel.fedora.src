@@ -1,0 +1,16 @@
+# Symbol: USB_G_WEBCAM [=n]
+# Type  : tristate
+# Defined at drivers/usb/gadget/legacy/Kconfig:501
+#   Prompt: USB Webcam Gadget
+#   Depends on: USB_SUPPORT [=y] && USB_GADGET [=m] && VIDEO_DEV [=m]
+#   Location:
+#     -> Device Drivers
+#       -> USB support (USB_SUPPORT [=y])
+#         -> USB Gadget Support (USB_GADGET [=m])
+#           -> USB Gadget precomposed configurations
+#             -> USB Webcam Gadget (USB_G_WEBCAM [=n])
+# Selects: USB_LIBCOMPOSITE [=n] && VIDEOBUF2_DMA_SG [=n] && VIDEOBUF2_VMALLOC [=m] && USB_F_UVC [=n]
+# 
+# 
+# 
+# CONFIG_USB_G_WEBCAM is not set
