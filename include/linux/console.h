@@ -17,6 +17,7 @@
 #include <linux/atomic.h>
 #include <linux/bits.h>
 #include <linux/rculist.h>
+#include <linux/rcuwait.h>
 #include <linux/types.h>
 
 struct vc_data;
@@ -305,6 +306,8 @@ struct nbcon_write_context {
  * @nbcon_state:	State for nbcon consoles
  * @nbcon_seq:		Sequence number of the next record for nbcon to print
  * @pbufs:		Pointer to nbcon private buffer
+ * @kthread:		Printer kthread for this console
+ * @rcuwait:		RCU-safe wait object for @kthread waking
  */
 struct console {
 	char			name[16];
@@ -355,9 +358,81 @@ struct console {
 	 */
 	bool (*write_atomic)(struct console *con, struct nbcon_write_context *wctxt);
 
+	/**
+	 * @write_thread:
+	 *
+	 * NBCON callback to write out text in task context. (Optional)
+	 *
+	 * This callback is called with the console already acquired. Any
+	 * additional driver synchronization should have been performed by
+	 * driver_enter().
+	 *
+	 * This callback is always called from task context but with migration
+	 * disabled.
+	 *
+	 * The same criteria for console ownership verification and unsafe
+	 * sections applies as with write_atomic(). The difference between
+	 * this callback and write_atomic() is that this callback is used
+	 * during normal operation and is always called from task context.
+	 * This provides drivers with a relatively relaxed locking context
+	 * for synchronizing output to the hardware.
+	 *
+	 * Returns true if all text was successfully written out, otherwise
+	 * false.
+	 */
+	bool (*write_thread)(struct console *con, struct nbcon_write_context *wctxt);
+
+	/**
+	 * @driver_enter:
+	 *
+	 * NBCON callback to begin synchronization with driver code.
+	 * (Required for NBCON if write_thread is provided)
+	 *
+	 * Console drivers typically must deal with access to the hardware
+	 * via user input/output (such as an interactive login shell) and
+	 * output of kernel messages via printk() calls. This callback is
+	 * called before the kernel begins output via the write_thread()
+	 * callback due to printk() calls. The driver can use this
+	 * callback to acquire some driver lock in order to synchronize
+	 * against user input/output (or any other driver functionality).
+	 *
+	 * This callback is always called from task context. It may use any
+	 * synchronization method required by the driver. BUT this callback
+	 * MUST disable migration. The console driver may be using a
+	 * sychronization mechanism that already takes care of this (such as
+	 * spinlocks). Otherwise this function must explicitly call
+	 * migrate_disable().
+	 *
+	 * The flags argument is provided as a convenience to the driver. It
+	 * will be passed again to driver_exit() when printing is completed
+	 * (for example, if spin_lock_irqsave() was used). It can be ignored
+	 * if the driver does not need it.
+	 */
+	void (*driver_enter)(struct console *con, unsigned long *flags);
+
+	/**
+	 * @driver_exit:
+	 *
+	 * NBCON callback to finish synchronization with driver code.
+	 * (Required for NBCON if write_thread is provided)
+	 *
+	 * This callback is called after the kernel has finished printing a
+	 * printk message. It is the counterpart to driver_enter().
+	 *
+	 * This callback is always called from task context. It must
+	 * appropriately re-enable migration (depending on how driver_enter()
+	 * disabled migration).
+	 *
+	 * The flags argument is the value of the same variable that was
+	 * passed to driver_enter().
+	 */
+	void (*driver_exit)(struct console *con, unsigned long flags);
+
 	atomic_t		__private nbcon_state;
 	atomic_long_t		__private nbcon_seq;
 	struct printk_buffers	*pbufs;
+	struct task_struct	*kthread;
+	struct rcuwait		rcuwait;
 };
 
 #ifdef CONFIG_LOCKDEP
