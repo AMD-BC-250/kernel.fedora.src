@@ -1164,10 +1164,11 @@ static __ref unsigned int *nbcon_get_cpu_emergency_nesting(void)
 }
 
 /**
- * nbcon_atomic_emit_one - Print one record for an nbcon console using the
- *				write_atomic() callback
+ * nbcon_emit_one - Print one record for an nbcon console using the
+ *			specified callback
  * @wctxt:	An initialized write context struct to use
  *		for this context
+ * @use_atomic:	True if the write_atomic callback is to be used
  *
  * Return:	False if the given console could not print a record or there
  *		are no more records to print, otherwise true.
@@ -1175,7 +1176,7 @@ static __ref unsigned int *nbcon_get_cpu_emergency_nesting(void)
  * This is an internal helper to handle the locking of the console before
  * calling nbcon_emit_next_record().
  */
-static bool nbcon_atomic_emit_one(struct nbcon_write_context *wctxt)
+static bool nbcon_emit_one(struct nbcon_write_context *wctxt, bool use_atomic)
 {
 	struct nbcon_context *ctxt = &ACCESS_PRIVATE(wctxt, ctxt);
 
@@ -1187,7 +1188,7 @@ static bool nbcon_atomic_emit_one(struct nbcon_write_context *wctxt)
 	 * handed over or taken over. In both cases the context is no
 	 * longer valid.
 	 */
-	if (!nbcon_emit_next_record(wctxt, true))
+	if (!nbcon_emit_next_record(wctxt, use_atomic))
 		return false;
 
 	nbcon_context_release(ctxt);
@@ -1226,6 +1227,7 @@ enum nbcon_prio nbcon_get_default_prio(void)
  *		both the console_lock and the SRCU read lock. Otherwise it
  *		is set to false.
  * @cookie:	The cookie from the SRCU read lock.
+ * @use_atomic:	True if the write_atomic callback is to be used
  *
  * Context:	Any context which could not be migrated to another CPU.
  * Return:	True if a record could be printed, otherwise false.
@@ -1235,7 +1237,7 @@ enum nbcon_prio nbcon_get_default_prio(void)
  * Essentially it is the nbcon version of console_emit_next_record().
  */
 bool nbcon_legacy_emit_next_record(struct console *con, bool *handover,
-				   int cookie)
+				   int cookie, bool use_atomic)
 {
 	struct nbcon_write_context wctxt = { };
 	struct nbcon_context *ctxt = &ACCESS_PRIVATE(&wctxt, ctxt);
@@ -1244,19 +1246,29 @@ bool nbcon_legacy_emit_next_record(struct console *con, bool *handover,
 
 	*handover = false;
 
-	/* Use the same procedure as console_emit_next_record(). */
-	printk_safe_enter_irqsave(flags);
-	console_lock_spinning_enable();
-	stop_critical_timings();
+	ctxt->console = con;
 
-	ctxt->console	= con;
-	ctxt->prio	= nbcon_get_default_prio();
+	if (use_atomic) {
+		/* Use the same procedure as console_emit_next_record(). */
+		printk_safe_enter_irqsave(flags);
+		console_lock_spinning_enable();
+		stop_critical_timings();
 
-	progress = nbcon_atomic_emit_one(&wctxt);
+		ctxt->prio = nbcon_get_default_prio();
+		progress = nbcon_emit_one(&wctxt, use_atomic);
 
-	start_critical_timings();
-	*handover = console_lock_spinning_disable_and_check(cookie);
-	printk_safe_exit_irqrestore(flags);
+		start_critical_timings();
+		*handover = console_lock_spinning_disable_and_check(cookie);
+		printk_safe_exit_irqrestore(flags);
+	} else {
+		con->driver_enter(con, &flags);
+		cant_migrate();
+
+		ctxt->prio = nbcon_get_default_prio();
+		progress = nbcon_emit_one(&wctxt, use_atomic);
+
+		con->driver_exit(con, flags);
+	}
 
 	return progress;
 }
@@ -1312,7 +1324,7 @@ static void __nbcon_atomic_flush_all(u64 stop_seq, bool allow_unsafe_takeover)
 
 			ctxt->prio = nbcon_get_default_prio();
 
-			any_progress |= nbcon_atomic_emit_one(&wctxt);
+			any_progress |= nbcon_emit_one(&wctxt, true);
 
 			local_irq_restore(irq_flags);
 		}
@@ -1462,6 +1474,8 @@ static int __init printk_setup_threads(void)
 	printk_threads_enabled = true;
 	for_each_console(con)
 		nbcon_kthread_create(con);
+	if (force_printkthreads() && printing_via_unlock)
+		nbcon_legacy_kthread_create();
 	console_list_unlock();
 	return 0;
 }
