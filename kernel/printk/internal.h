@@ -94,6 +94,7 @@ void nbcon_atomic_flush_all(void);
 bool nbcon_legacy_emit_next_record(struct console *con, bool *handover,
 				   int cookie);
 void nbcon_kthread_create(struct console *con);
+void nbcon_wake_threads(void);
 
 /*
  * Check if the given console is currently capable and allowed to print
