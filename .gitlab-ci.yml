@@ -15,9 +15,23 @@ include:
     rules: [{if: $CI_PIPELINE_SOURCE == "merge_request_event"}]
 
 workflow:
+  name: $PIPELINE_NAME
   rules:
     # Rawhide release pipelines
     - if: '$CI_PIPELINE_SOURCE == "schedule"'
+      variables:
+        PIPELINE_NAME: 'Scheduled pipeline with RAWHIDE_RELEASE=$RAWHIDE_RELEASE'
+    # when triggered as a multi-project pipeline for an MR
+    - if: $CI_PIPELINE_SOURCE == 'pipeline' &&
+          $PARENT_MERGE_REQUEST_IID != null && $PARENT_MERGE_REQUEST_IID != "" &&
+          $CI_PROJECT_PATH =~ /^cki-project.kernel-ark/
+      variables:
+        PIPELINE_NAME: 'Downstream pipeline for $PARENT_PROJECT_PATH!$PARENT_MERGE_REQUEST_IID'
+    # when triggered as a multi-project pipeline
+    - if: $CI_PIPELINE_SOURCE == 'pipeline' &&
+          $CI_PROJECT_PATH =~ /^cki-project.kernel-ark/
+      variables:
+        PIPELINE_NAME: 'Downstream pipeline for $PARENT_PROJECT_PATH'
     # HEAD pipelines
     - if: $CI_PIPELINE_SOURCE =~ /push|web/ &&
           $CI_PROJECT_PATH =~ /^cki-project.kernel-ark/
@@ -40,6 +54,13 @@ workflow:
     when: never
   only-ark-latest-head: &only-ark-latest-head
     if: $CI_COMMIT_BRANCH != "ark-latest" || $CI_PIPELINE_SOURCE !~ /push|web/
+    when: never
+  only-ark-latest-head-mr: &only-ark-latest-head-mr
+    if: ($CI_MERGE_REQUEST_TARGET_BRANCH_NAME != "os-build") &&
+        ($CI_COMMIT_BRANCH != "ark-latest" || $CI_PIPELINE_SOURCE !~ /push|web/)
+    when: never
+  only-cki-gating-head: &only-cki-gating-head
+    if: $CI_COMMIT_BRANCH != "cki-gating" || $CI_PIPELINE_SOURCE !~ /pipeline/ || $builder_image !~ $JOB_FILTER
     when: never
   on-success: &on-success
     when: on_success
@@ -87,6 +108,15 @@ workflow:
     kpet_tree_name: eln
     disttag_override: '.eln'
 
+.cki_gating_overrides:
+  variables:
+    # assume potential breakages affect all arches and test only one arch
+    architectures: x86_64
+    # prevent the CKI production machinery from caring about these pipelines
+    CKI_DEPLOYMENT_ENVIRONMENT: retrigger
+    # explicitly pass down some trigger variables to the child pipeline
+    builder_image_tag: $builder_image_tag
+
 .no_tests:
   variables:
     skip_setup: 'true'
@@ -126,211 +156,243 @@ workflow:
     - *only-ark-latest-head
     - *on-success
 
-.variants:
-  rawhide-up: &rawhide-up
+.cki_gating_head:
+  rules:
+    - *only-cki-gating-head
+    - *on-success
+
+# variants
+.rawhide_up:
+  variables:
     rpmbuild_with: up base
     package_name: kernel
     architectures: x86_64 aarch64 s390x ppc64le
     run_redhat_self_test: 'true'
-  rawhide-up-debug: &rawhide-up-debug
+.rawhide_up_debug:
+  variables:
     rpmbuild_with: up debug
     package_name: kernel-debug
     architectures: x86_64 aarch64
-  rawhide-16k: &rawhide-16k
+.rawhide_16k:
+  variables:
     rpmbuild_with: arm64_16k base
     package_name: kernel-16k
     architectures: aarch64
-  rawhide-16k-debug: &rawhide-16k-debug
+.rawhide_16k_debug:
+  variables:
     rpmbuild_with: arm64_16k debug
     package_name: kernel-16k-debug
     architectures: aarch64
-  rawhide-clang-up: &rawhide-clang-up
+.rawhide_clang_up:
+  variables:
     rpmbuild_with: up base
     package_name: kernel
     architectures: x86_64 aarch64 s390x ppc64le
     compiler: clang
-  rawhide-clang-up-debug: &rawhide-clang-up-debug
+.rawhide_clang_up_debug:
+  variables:
     rpmbuild_with: up debug
     package_name: kernel-debug
     architectures: x86_64 aarch64
     compiler: clang
-  rawhide-clanglto-up: &rawhide-clanglto-up
+.rawhide_clanglto_up:
+  variables:
     rpmbuild_with: clang_lto up base
     package_name: kernel
     architectures: x86_64 aarch64
     compiler: clang
-  rawhide-clanglto-up-debug: &rawhide-clanglto-up-debug
+.rawhide_clanglto_up_debug:
+  variables:
     rpmbuild_with: clang_lto up debug
     package_name: kernel-debug
     architectures: x86_64 aarch64
     compiler: clang
-  eln-up: &eln-up
+.eln_up:
+  variables:
     rpmbuild_with: up base
     package_name: kernel
     architectures: x86_64 aarch64 s390x ppc64le
     run_redhat_self_test: 'true'
-  eln-up-debug: &eln-up-debug
+.eln_up_debug:
+  variables:
     rpmbuild_with: up debug
     package_name: kernel-debug
     architectures: x86_64 aarch64 s390x ppc64le
-  eln-clang-up: &eln-clang-up
+.eln_clang_up:
+  variables:
     rpmbuild_with: up base
     package_name: kernel
     architectures: x86_64 aarch64 s390x ppc64le
     compiler: clang
-  eln-clang-up-debug: &eln-clang-up-debug
+.eln_clang_up_debug:
+  variables:
     rpmbuild_with: up debug
     package_name: kernel-debug
     architectures: x86_64 aarch64 s390x ppc64le
     compiler: clang
   eln-rt: &eln-rt
+.eln_rt:
+  variables:
     rpmbuild_with: realtime base
     package_name: kernel-rt
     architectures: x86_64
-  eln-rt-debug: &eln-rt-debug
+.eln_rt_debug:
+  variables:
     rpmbuild_with: realtime debug
     package_name: kernel-rt-debug
     architectures: x86_64
-  eln-64k: &eln-64k
+.eln_64k:
+  variables:
     rpmbuild_with: arm64_64k base
     package_name: kernel-64k
     architectures: aarch64
-  eln-64k-debug: &eln-64k-debug
+.eln_64k_debug:
+  variables:
     rpmbuild_with: arm64_64k debug
     package_name: kernel-64k-debug
     architectures: aarch64
 
 # Rawhide CI
 ark_merge_request:
-  extends: [.merge_request, .trigger_rawhide, .no_tests, .srpm_for_bot]
-  variables: *rawhide-up
+  extends: [.merge_request, .trigger_rawhide, .no_tests, .srpm_for_bot,
+            .rawhide_up]
 
 ark_debug_merge_request:
-  extends: [.merge_request, .trigger_rawhide, .no_tests, .manual_for_bot]
-  variables: *rawhide-up-debug
+  extends: [.merge_request, .trigger_rawhide, .no_tests, .manual_for_bot,
+            .rawhide_up_debug]
 
 ark_16k_merge_request:
-  extends: [.merge_request, .trigger_rawhide, .no_tests, .manual_for_bot]
-  variables: *rawhide-16k
+  extends: [.merge_request, .trigger_rawhide, .no_tests, .manual_for_bot,
+            .rawhide_16k]
 
 ark_16k_debug_merge_request:
-  extends: [.merge_request, .trigger_rawhide, .no_tests, .manual_for_bot]
-  variables: *rawhide-16k-debug
+  extends: [.merge_request, .trigger_rawhide, .no_tests, .manual_for_bot,
+            .rawhide_16k_debug]
 
 ark_clang_merge_request:
-  extends: [.merge_request, .trigger_rawhide, .no_tests, .manual_for_bot]
-  variables: *rawhide-clang-up
+  extends: [.merge_request, .trigger_rawhide, .no_tests, .manual_for_bot,
+            .rawhide_clang_up]
 
 ark_clang_debug_merge_request:
-  extends: [.merge_request, .trigger_rawhide, .no_tests, .manual_for_bot]
-  variables: *rawhide-clang-up-debug
+  extends: [.merge_request, .trigger_rawhide, .no_tests, .manual_for_bot,
+            .rawhide_clang_up_debug]
 
 ark_clanglto_merge_request:
-  extends: [.merge_request, .trigger_rawhide, .no_tests, .manual_for_bot]
-  variables: *rawhide-clanglto-up
+  extends: [.merge_request, .trigger_rawhide, .no_tests, .manual_for_bot,
+            .rawhide_clanglto_up]
 
 ark_clanglto_debug_merge_request:
-  extends: [.merge_request, .trigger_rawhide, .no_tests, .manual_for_bot]
-  variables: *rawhide-clanglto-up-debug
+  extends: [.merge_request, .trigger_rawhide, .no_tests, .manual_for_bot,
+            .rawhide_clanglto_up_debug]
 
 # Rawhide baselines
 ark_baseline:
-  extends: [.baseline, .trigger_rawhide, .reported_tests, .ark_latest_head]
-  variables: *rawhide-up
+  extends: [.baseline, .trigger_rawhide, .reported_tests, .ark_latest_head,
+            .rawhide_up]
 
 ark_debug_baseline:
-  extends: [.baseline, .trigger_rawhide, .reported_tests, .ark_latest_head]
-  variables: *rawhide-up-debug
+  extends: [.baseline, .trigger_rawhide, .reported_tests, .ark_latest_head,
+            .rawhide_up_debug]
 
 ark_16k_baseline:
-  extends: [.baseline, .trigger_rawhide, .no_tests, .ark_latest_head]
-  variables: *rawhide-16k
+  extends: [.baseline, .trigger_rawhide, .no_tests, .ark_latest_head,
+            .rawhide_16k]
 
 ark_16k_debug_baseline:
-  extends: [.baseline, .trigger_rawhide, .no_tests, .ark_latest_head]
-  variables: *rawhide-16k-debug
+  extends: [.baseline, .trigger_rawhide, .no_tests, .ark_latest_head,
+            .rawhide_16k_debug]
 
 ark_clang_baseline:
-  extends: [.baseline, .trigger_rawhide, .reported_tests_clang, .ark_latest_head]
-  variables: *rawhide-clang-up
+  extends: [.baseline, .trigger_rawhide, .reported_tests_clang, .ark_latest_head,
+            .rawhide_clang_up]
 
 ark_clang_debug_baseline:
-  extends: [.baseline, .trigger_rawhide, .reported_tests_clang, .ark_latest_head]
-  variables: *rawhide-clang-up-debug
+  extends: [.baseline, .trigger_rawhide, .reported_tests_clang, .ark_latest_head,
+            .rawhide_clang_up_debug]
 
 ark_clanglto_baseline:
-  extends: [.baseline, .trigger_rawhide, .reported_tests_clang, .ark_latest_head]
-  variables: *rawhide-clanglto-up
+  extends: [.baseline, .trigger_rawhide, .reported_tests_clang, .ark_latest_head,
+            .rawhide_clanglto_up]
 
 ark_clanglto_debug_baseline:
-  extends: [.baseline, .trigger_rawhide, .reported_tests_clang, .ark_latest_head]
-  variables: *rawhide-clanglto-up-debug
+  extends: [.baseline, .trigger_rawhide, .reported_tests_clang, .ark_latest_head,
+            .rawhide_clanglto_up_debug]
+
+# Rawhide CKI container image gating
+ark_cki_gating:
+  extends: [.baseline, .trigger_rawhide, .no_tests, .cki_gating_head,
+            .rawhide_up, .cki_gating_overrides]
 
 # ELN CI
 eln_merge_request:
-  extends: [.merge_request, .trigger_eln, .no_tests, .srpm_for_bot]
-  variables: *eln-up
+  extends: [.merge_request, .trigger_eln, .no_tests, .srpm_for_bot,
+            .eln_up]
 
 eln_debug_merge_request:
-  extends: [.merge_request, .trigger_eln, .no_tests, .manual_for_bot]
-  variables: *eln-up-debug
+  extends: [.merge_request, .trigger_eln, .no_tests, .manual_for_bot,
+            .eln_up_debug]
 
 # eln_clang_merge_request:
-#   extends: [.merge_request, .trigger_eln, .no_tests, .manual_for_bot]
-#   variables: *eln-clang-up
+#   extends: [.merge_request, .trigger_eln, .no_tests, .manual_for_bot,
+#             .eln_clang_up]
 #
 # eln_clang_debug_merge_request:
-#   extends: [.merge_request, .trigger_eln, .no_tests, .manual_for_bot]
-#   variables: *eln-clang-up-debug
+#   extends: [.merge_request, .trigger_eln, .no_tests, .manual_for_bot,
+#             .eln_clang_up_debug]
 
 eln_realtime_merge_request:
-  extends: [.merge_request, .trigger_eln, .no_tests, .manual_for_bot]
-  variables: *eln-rt
+  extends: [.merge_request, .trigger_eln, .no_tests, .manual_for_bot,
+            .eln_rt]
 
 eln_realtime_debug_merge_request:
-  extends: [.merge_request, .trigger_eln, .no_tests, .manual_for_bot]
-  variables: *eln-rt-debug
+  extends: [.merge_request, .trigger_eln, .no_tests, .manual_for_bot,
+            .eln_rt_debug]
 
 eln_64k_merge_request:
-  extends: [.merge_request, .trigger_eln, .no_tests, .manual_for_bot]
-  variables: *eln-64k
+  extends: [.merge_request, .trigger_eln, .no_tests, .manual_for_bot,
+            .eln_64k]
 
 eln_64k_debug_merge_request:
-  extends: [.merge_request, .trigger_eln, .no_tests, .manual_for_bot]
-  variables: *eln-64k-debug
+  extends: [.merge_request, .trigger_eln, .no_tests, .manual_for_bot,
+            .eln_64k_debug]
 
 # ELN baselines
 eln_baseline:
-  extends: [.baseline, .trigger_eln, .reported_tests, .ark_latest_head]
-  variables: *eln-up
+  extends: [.baseline, .trigger_eln, .reported_tests, .ark_latest_head,
+            .eln_up]
 
 eln_debug_baseline:
-  extends: [.baseline, .trigger_eln, .reported_tests, .ark_latest_head]
-  variables: *eln-up-debug
+  extends: [.baseline, .trigger_eln, .reported_tests, .ark_latest_head,
+            .eln_up_debug]
 
 # eln_clang_baseline:
-#   extends: [.baseline, .trigger_eln, .reported_tests_clang, .ark_latest_head]
-#   variables: *eln-clang-up
+#   extends: [.baseline, .trigger_eln, .reported_tests_clang, .ark_latest_head,
+#             .eln_clang_up]
 #
 # eln_clang_debug_baseline:
-#   extends: [.baseline, .trigger_eln, .reported_tests_clang, .ark_latest_head]
-#   variables: *eln-clang-up-debug
+#   extends: [.baseline, .trigger_eln, .reported_tests_clang, .ark_latest_head,
+#             .eln_clang_up_debug]
 
 eln_realtime_baseline:  # no tests as realtime code not present upstream
-  extends: [.baseline, .trigger_eln, .no_tests, .ark_latest_head]
-  variables: *eln-rt
+  extends: [.baseline, .trigger_eln, .no_tests, .ark_latest_head,
+            .eln_rt]
 
 eln_realtime_debug_baseline:  # no tests as realtime code not present upstream
-  extends: [.baseline, .trigger_eln, .no_tests, .ark_latest_head]
-  variables: *eln-rt-debug
+  extends: [.baseline, .trigger_eln, .no_tests, .ark_latest_head,
+            .eln_rt_debug]
 
 eln_64k_baseline:
-  extends: [.baseline, .trigger_eln, .reported_tests, .ark_latest_head]
-  variables: *eln-64k
+  extends: [.baseline, .trigger_eln, .reported_tests, .ark_latest_head,
+            .eln_64k]
 
 eln_64k_debug_baseline:
-  extends: [.baseline, .trigger_eln, .reported_tests, .ark_latest_head]
-  variables: *eln-64k-debug
+  extends: [.baseline, .trigger_eln, .reported_tests, .ark_latest_head,
+            .eln_64k_debug]
+
+# ELN CKI container image gating
+eln_cki_gating:
+  extends: [.baseline, .trigger_eln, .no_tests, .cki_gating_head,
+            .eln_up, .cki_gating_overrides]
 
 # scheduled job
 .scheduled_setup:
@@ -425,5 +487,19 @@ pages:
       - public
   rules:
     - *only-os-build-head-mr
+    - *manual-on-mr
+    - *on-success
+
+tag-cki-gating:
+  image: quay.io/cki/cki-tools:production
+  stage: deploy
+  script:
+    - mkdir --mode 700 --parents ~/.ssh
+    - echo "${GITLAB_KNOWN_HOSTS}" > ~/.ssh/known_hosts
+    - eval $(ssh-agent -s)
+    - ssh-add -q - <<< "${PRIVATE_KEY}"
+    - git push --force git@${CI_SERVER_HOST}:${CI_PROJECT_PATH}.git HEAD:refs/heads/cki-gating
+  rules:
+    - *only-ark-latest-head-mr
     - *manual-on-mr
     - *on-success
