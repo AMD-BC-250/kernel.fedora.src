@@ -443,11 +443,6 @@ Summary: The Linux kernel
 %define with_arm64_64k 0
 %endif
 
-# RT kernel is only built on x86_64 and aarch64
-%ifnarch x86_64 aarch64
-%define with_realtime 0
-%endif
-
 # turn off kABI DUP check and DWARF-based check if kABI check is disabled
 %if !%{with_kabichk}
 %define with_kabidupchk 0
@@ -503,20 +498,25 @@ Summary: The Linux kernel
 %define with_sparse 0
 %endif
 
-# zfcpdump mechanism is s390 only
-%ifnarch s390x
-%define with_zfcpdump 0
-%endif
-
-# 16k and 64k variants only for aarch64
-%ifnarch aarch64
-%define with_arm64_16k 0
-%define with_arm64_64k 0
-%endif
-
 %if 0%{?fedora}
 # This is not for Fedora
 %define with_zfcpdump 0
+%endif
+
+# disable variants for unsupported arches
+%if 0%{?fedora}
+{{for_each_variant
+%ifnarch VARIANT_FEDORA_ARCHES
+%define with_VARIANT_NAME 0
+%endif
+}}
+%endif
+%if 0%{?rhel}
+{{for_each_variant
+%ifnarch VARIANT_RHEL_ARCHES
+%define with_VARIANT_NAME 0
+%endif
+}}
 %endif
 
 # Per-arch tweaks
