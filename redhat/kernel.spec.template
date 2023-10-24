@@ -2894,10 +2894,16 @@ BuildKernel %make_target %kernel_image %{_use_vdso}
 %endif
 
 %ifnarch noarch i686 %{nobuildarches}
-%if !%{with_debug} && !%{with_zfcpdump} && !%{with_up} && !%{with_arm64_16k} && !%{with_arm64_64k} && !%{with_realtime}
 # If only building the user space tools, then initialize the build environment
 # and some variables so that the various userspace tools can be built.
 %{log_msg "Initialize userspace tools build environment"}
+%define init_build_vars 1
+{{for_each_variant
+%if %{with_VARIANT_NAME}
+%define init_build_vars 0
+%endif
+}}
+%if %{init_build_vars}
 InitBuildVars
 # Some tests build also modules, and need Module.symvers
 if ! [[ -e Module.symvers ]] && [[ -f $DevelDir/Module.symvers ]]; then
