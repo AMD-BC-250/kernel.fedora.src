@@ -424,8 +424,9 @@ Summary: The Linux kernel
 
 # if requested, only build realtime kernel
 %if %{with_rtonly}
-%define with_realtime 1
-%define with_up 0
+{{for_each_variant VARIANT_NAME!="realtime"
+%define with_VARIANT_NAME 0
+}}
 %define with_debug 0
 %define with_debuginfo 0
 %define with_vdso_install 0
@@ -438,9 +439,6 @@ Summary: The Linux kernel
 %define with_ipaclones 0
 %define with_headers 0
 %define with_efiuki 0
-%define with_zfcpdump 0
-%define with_arm64_16k 0
-%define with_arm64_64k 0
 %endif
 
 # turn off kABI DUP check and DWARF-based check if kABI check is disabled
@@ -576,13 +574,10 @@ Summary: The Linux kernel
 
 %ifarch %nobuildarches
 # disable BuildKernel commands
-%define with_up 0
+{{for_each_variant
+%define with_VARIANT_NAME 0
+}}
 %define with_debug 0
-%define with_zfcpdump 0
-%define with_arm64_16k 0
-%define with_arm64_64k 0
-%define with_realtime 0
-
 %define with_debuginfo 0
 %define with_perf 0
 %define with_libperf 0
