@@ -111,3 +111,7 @@ else
 	# compatibility is necessary.
 	touch "${SOURCES}/patch-${SPECKVERSION}.${SPECKPATCHLEVEL}"-redhat.patch
 fi
+
+# final step, run all python snippets in spec template
+"${0%/*}"/run_snippets.py "$SOURCES/$SPECFILE" > "$SOURCES/$SPECFILE.withvar"
+mv -f "$SOURCES/$SPECFILE.withvar" "$SOURCES/$SPECFILE"
