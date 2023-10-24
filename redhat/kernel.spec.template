@@ -615,26 +615,13 @@ Summary: The Linux kernel
 %endif
 
 # short-hand for "are we building base/non-debug variants of ...?"
-%if %{with_up} && %{with_base}
-%define with_up_base 1
+{{for_each_variant
+%if %{with_VARIANT_NAME} && %{with_base}
+%define with_VARIANT_NAME_base 1
 %else
-%define with_up_base 0
+%define with_VARIANT_NAME_base 0
 %endif
-%if %{with_realtime} && %{with_base}
-%define with_realtime_base 1
-%else
-%define with_realtime_base 0
-%endif
-%if %{with_arm64_16k} && %{with_base}
-%define with_arm64_16k_base 1
-%else
-%define with_arm64_16k_base 0
-%endif
-%if %{with_arm64_64k} && %{with_base}
-%define with_arm64_64k_base 1
-%else
-%define with_arm64_64k_base 0
-%endif
+}}
 
 #
 # Packages that need to be installed before the kernel is, because the %%post
