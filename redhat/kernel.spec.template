@@ -1508,6 +1508,18 @@ This package provides KVM modules for package kernel%{?1:-%{1}}.\
 %{nil}
 %endif
 
+# This macro creates a kernel-uki-virt <subpackage>
+# Parameters: [-n <pretty-name>] [-m] [-o] <subpackage>
+%define kernel_variant_uki_virt_package(n:mo) \
+%package %{?1:%{1}-}uki-virt\
+Summary: %{variant_summary} unified kernel image for virtual machines\
+Provides: installonlypkg(kernel)\
+Provides: kernel-%{?1:%{1}-}uname-r = %{KVERREL}%{uname_suffix %{?1:+%{1}}}\
+Requires: kernel%{?1:-%{1}}-modules-core-uname-r = %{KVERREL}%{uname_suffix %{?1:+%{1}}}\
+Requires(pre): %{kernel_prereq}\
+Requires(pre): systemd >= 254-1\
+%{nil}
+
 #
 # This macro creates a kernel-<subpackage> and its -devel and -debuginfo too.
 #	%%define variant_summary The Linux kernel compiled for <configuration>
@@ -1540,16 +1552,6 @@ Requires: kernel-%{?1:%{1}-}-modules-core-uname-r = %{KVERREL}%{uname_variant %{
 %endif\
 %if "%{1}" == "rt" || "%{1}" == "rt-debug"\
 %{expand:%%kernel_kvm_package %{?1:%{1}} %{!?{-n}:%{1}}%{?{-n}:%{-n*}}}\
-%else \
-%if %{with_efiuki}\
-%package %{?1:%{1}-}uki-virt\
-Summary: %{variant_summary} unified kernel image for virtual machines\
-Provides: installonlypkg(kernel)\
-Provides: kernel-%{?1:%{1}-}uname-r = %{KVERREL}%{uname_suffix %{?1:+%{1}}}\
-Requires: kernel%{?1:-%{1}}-modules-core-uname-r = %{KVERREL}%{uname_suffix %{?1:+%{1}}}\
-Requires(pre): %{kernel_prereq}\
-Requires(pre): systemd >= 254-1\
-%endif\
 %endif\
 %if %{with_gcov}\
 %{expand:%%kernel_gcov_package %{?1:%{1}}}\
@@ -1579,6 +1581,48 @@ This package provides kernel modules for the %{?2:%{2} }kernel package for Red H
 %{nil}
 
 # Now, each variant package.
+{{for_each_variant
+%if "VARIANT_SUFFIX" == ""
+%define var_core_pkg core
+%define var_uki_pkg uki-virt
+%else
+%define var_core_pkg VARIANT_SUFFIX-core
+%define var_uki_pkg VARIANT_SUFFIX-uki-virt
+%endif
+
+%if %{with_VARIANT_NAME_base}
+%define variant_summary VARIANT_SUMMARY
+%kernel_variant_package VARIANT_SUFFIX
+%description %{var_core_pkg}
+VARIANT_DESCRIPTION
+%if %{with_efiuki} && VARIANT_EFIUKI
+%kernel_variant_uki_virt_package VARIANT_SUFFIX
+%description %{var_uki_pkg}
+Prebuilt VARIANT_SUFFIX unified kernel image for virtual machines.
+%endif
+%endif
+
+}}
+
+{{for_each_variant VARIANT_DEBUG_SUFFIX!=""
+%if %{with_VARIANT_NAME} && %{with_debug}
+%define variant_summary VARIANT_DEBUG_SUMMARY
+%if !%{debugbuildsenabled}
+%kernel_variant_package -m VARIANT_DEBUG_SUFFIX
+%else
+%kernel_variant_package VARIANT_DEBUG_SUFFIX
+%endif
+%description VARIANT_DEBUG_SUFFIX-core
+VARIANT_DEBUG_DESCRIPTION
+%if %{with_efiuki} && VARIANT_EFIUKI
+%kernel_variant_uki_virt_package VARIANT_DEBUG_SUFFIX
+%description VARIANT_DEBUG_SUFFIX-uki-virt
+Prebuilt VARIANT_DEBUG_SUFFIX unified kernel image for virtual machines.
+%endif
+%endif
+
+}}
+
 %if %{with_zfcpdump}
 %define variant_summary The Linux kernel compiled for zfcpdump usage
 %kernel_variant_package -o zfcpdump
@@ -1614,6 +1658,9 @@ on kernel bugs, as some of these options impact performance noticably.
 %if %{with_arm64_64k_base}
 %define variant_summary The Linux kernel compiled for 64k pagesize usage
 %kernel_variant_package 64k
+%if %{with_efiuki}
+%kernel_variant_uki_virt_package 64k
+%endif
 %description 64k-core
 The kernel package contains a variant of the ARM64 Linux kernel using
 a 64K page size.
@@ -1625,6 +1672,9 @@ a 64K page size.
 %kernel_variant_package -m 64k-debug
 %else
 %kernel_variant_package 64k-debug
+%endif
+%if %{with_efiuki}
+%kernel_variant_uki_virt_package 64k-debug
 %endif
 %description 64k-debug-core
 The debug kernel package contains a variant of the ARM64 Linux kernel using
@@ -1662,6 +1712,9 @@ PREEMPT_RT real-time preemption support
 %else
 %kernel_variant_package debug
 %endif
+%if %{with_efiuki}
+%kernel_variant_uki_virt_package debug
+%endif
 %description debug-core
 The kernel package contains the Linux kernel (vmlinuz), the core of any
 Linux operating system.  The kernel handles the basic functions
@@ -1678,12 +1731,16 @@ on kernel bugs, as some of these options impact performance noticably.
 
 %define variant_summary The Linux kernel
 %kernel_variant_package
+%if %{with_efiuki}
+%kernel_variant_uki_virt_package
+%endif
 %description core
 The kernel package contains the Linux kernel (vmlinuz), the core of any
 Linux operating system.  The kernel handles the basic functions
 of the operating system: memory allocation, process allocation, device
 input and output, etc.
 %endif
+
 
 %if %{with_up} && %{with_debug} && %{with_efiuki}
 %description debug-uki-virt
@@ -2561,7 +2618,14 @@ BuildKernel() {
     # Copy the System.map file for depmod to use
     cp System.map $RPM_BUILD_ROOT/.
 
-    if [[ "$Variant" == "rt" || "$Variant" == "rt-debug" ]]; then
+    skip_efiuki=0
+{{for_each_variant VARIANT_EFIUKI==0 and VARIANT_DEBUG_SUFFIX!=""
+    if [ "VARIANT_SUFFIX" = "$Variant" -o "VARIANT_DEBUG_SUFFIX" = "$Variant" ]; then
+        skip_efiuki=1
+    fi
+}}
+
+    if [ "$skip_efiuki" == 1 ]; then
 	%{log_msg "Skipping efiuki build"}
     else
 %if %{with_efiuki}
@@ -2695,7 +2759,7 @@ BuildKernel() {
 
         %{log_msg "Create module list files for all kernel variants"}
         variants_param=""
-        if [[ "$Variant" == "rt" || "$Variant" == "rt-debug" ]]; then
+        if [ "$Variant" == "rt" -o "$Variant" == "rt-debug" ]; then
             variants_param="-r rt"
         fi
         # this creates ../modules-*.list output, where each kmod path is as it
@@ -2717,7 +2781,7 @@ BuildKernel() {
         create_module_file_list "kernel" ../modules.list ../kernel${Variant:+-${Variant}}-modules.list 0 0
         create_module_file_list "internal" ../modules-internal.list ../kernel${Variant:+-${Variant}}-modules-internal.list 0 1
         create_module_file_list "kernel" ../modules-extra.list ../kernel${Variant:+-${Variant}}-modules-extra.list 0 1
-        if [[ "$Variant" == "rt" || "$Variant" == "rt-debug" ]]; then
+        if [ "$Variant" == "rt" -o "$Variant" == "rt-debug" ]; then
             create_module_file_list "kvm" ../modules-rt-kvm.list ../kernel${Variant:+-${Variant}}-modules-rt-kvm.list 0 1
         fi
 %if 0%{!?fedora:1}
@@ -2831,7 +2895,13 @@ mkdir -p $RPM_BUILD_ROOT%{_libexecdir}
 
 cd linux-%{KVERREL}
 
-%if %{with_debug}
+{{for_each_variant VARIANT_DEBUG_SUFFIX!=""
+%if %{with_VARIANT_NAME} && %{with_debug}
+echo "building VARIANT_NAME debug package"
+BuildKernel %make_target %kernel_image %{_use_vdso} VARIANT_DEBUG_SUFFIX
+%endif
+}}
+
 %if %{with_realtime}
 BuildKernel %make_target %kernel_image %{_use_vdso} rt-debug
 %endif
@@ -2848,6 +2918,13 @@ BuildKernel %make_target %kernel_image %{_use_vdso} 64k-debug
 BuildKernel %make_target %kernel_image %{_use_vdso} debug
 %endif
 %endif
+
+{{for_each_variant
+%if %{with_VARIANT_NAME_base}
+echo "building VARIANT_NAME base package"
+BuildKernel %make_target %kernel_image %{_use_vdso} VARIANT_SUFFIX
+%endif
+}}
 
 %if %{with_zfcpdump}
 BuildKernel %make_target %kernel_image %{_use_vdso} zfcpdump
@@ -3589,6 +3666,36 @@ then\
 fi\
 %{nil}
 
+{{for_each_variant
+%if "VARIANT_SUFFIX" == ""
+%define var_arg %{nil}
+%else
+%define var_arg -v VARIANT_SUFFIX
+%endif
+
+%if %{with_VARIANT_NAME_base}
+%kernel_variant_preun %{var_arg}
+%kernel_variant_post %{var_arg}
+%if %{with_efiuki} && VARIANT_EFIUKI
+%kernel_variant_posttrans %{var_arg} -u virt
+%kernel_variant_preun %{var_arg} -u virt
+%endif
+%endif
+
+}}
+
+{{for_each_variant VARIANT_DEBUG_SUFFIX!=""
+%if %{with_debug} && %{with_VARIANT_NAME}
+%kernel_variant_preun -v VARIANT_DEBUG_SUFFIX
+%kernel_variant_post -v VARIANT_DEBUG_SUFFIX
+%if %{with_efiuki} && VARIANT_EFIUKI
+%kernel_variant_posttrans -v VARIANT_DEBUG_SUFFIX -u virt
+%kernel_variant_preun -v VARIANT_DEBUG_SUFFIX -u virt
+%endif
+%endif
+
+}}
+
 %if %{with_up_base} && %{with_efiuki}
 %kernel_variant_posttrans -u virt
 %kernel_variant_preun -u virt
@@ -3880,6 +3987,18 @@ fi\
 # or empty otherwise.
 %define elf_image_install_path %{?kernel_image_elf:%{image_install_path}}
 
+%define kernel_variant_files_efiuki(k:) \
+%if %{1}\
+%{expand:%%files %{?2:%{2}-}uki-virt}\
+/lib/modules/%{KVERREL}%{?2:+%{2}}/System.map\
+/lib/modules/%{KVERREL}%{?2:+%{2}}/symvers.%compext\
+/lib/modules/%{KVERREL}%{?2:+%{2}}/config\
+/lib/modules/%{KVERREL}%{?2:+%{2}}/modules.builtin*\
+%attr(0644, root, root) /lib/modules/%{KVERREL}%{?2:+%{2}}/%{?-k:%{-k*}}%{!?-k:vmlinuz}-virt.efi\
+%ghost /%{image_install_path}/efi/EFI/Linux/%{?-k:%{-k*}}%{!?-k:*}-%{KVERREL}%{?2:+%{2}}.efi\
+%endif\
+%{nil}
+
 #
 # This macro defines the %%files sections for a kernel package
 # and its devel and debuginfo packages.
@@ -3951,16 +4070,6 @@ fi\
 %endif\
 %if "%{3}" == "rt" || "%{3}" == "rt-debug"\
 %{expand:%%files -f kernel-%{?3:%{3}-}modules-rt-kvm.list %{?3:%{3}-}kvm}\
-%else\
-%if %{with_efiuki}\
-%{expand:%%files %{?3:%{3}-}uki-virt}\
-/lib/modules/%{KVERREL}%{?3:+%{3}}/System.map\
-/lib/modules/%{KVERREL}%{?3:+%{3}}/symvers.%compext\
-/lib/modules/%{KVERREL}%{?3:+%{3}}/config\
-/lib/modules/%{KVERREL}%{?3:+%{3}}/modules.builtin*\
-%attr(0644, root, root) /lib/modules/%{KVERREL}%{?3:+%{3}}/%{?-k:%{-k*}}%{!?-k:vmlinuz}-virt.efi\
-%ghost /%{image_install_path}/efi/EFI/Linux/%{?-k:%{-k*}}%{!?-k:*}-%{KVERREL}%{?3:+%{3}}.efi\
-%endif\
 %endif\
 %if %{?3:1} %{!?3:0}\
 %{expand:%%files %{3}}\
@@ -3972,6 +4081,24 @@ fi\
 %endif\
 %endif\
 %{nil}
+
+{{for_each_variant
+%if %{with_VARIANT_NAME}
+%kernel_variant_files %{_use_vdso} %{with_VARIANT_NAME_base} VARIANT_SUFFIX
+%if %{with_efiuki} && VARIANT_EFIUKI
+%kernel_variant_files_efiuki %{with_VARIANT_NAME_base} VARIANT_SUFFIX
+%endif
+%endif
+}}
+
+{{for_each_variant VARIANT_DEBUG_SUFFIX!=""
+%if %{with_VARIANT_NAME}
+%kernel_variant_files %{_use_vdso} %{with_debug} VARIANT_DEBUG_SUFFIX
+%if %{with_efiuki} && VARIANT_EFIUKI
+%kernel_variant_files_efiuki %{with_debug} VARIANT_DEBUG_SUFFIX
+%endif
+%endif
+}}
 
 %kernel_variant_files %{_use_vdso} %{with_up_base}
 %if %{with_up}
@@ -3988,6 +4115,18 @@ fi\
 %kernel_variant_files %{_use_vdso} %{with_debug} rt-debug
 %endif
 %if %{with_debug_meta}
+
+{{for_each_variant VARIANT_DEBUG_SUFFIX!=""
+%if %{with_VARIANT_NAME}
+%files VARIANT_DEBUG_SUFFIX
+%files VARIANT_DEBUG_SUFFIX-core
+%files VARIANT_DEBUG_SUFFIX-devel
+%files VARIANT_DEBUG_SUFFIX-devel-matched
+%files VARIANT_DEBUG_SUFFIX-modules
+%files VARIANT_DEBUG_SUFFIX-modules-extra
+%endif
+}}
+
 %files debug
 %files debug-core
 %files debug-devel
