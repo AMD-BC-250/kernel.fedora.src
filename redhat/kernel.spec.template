@@ -194,21 +194,17 @@ Summary: The Linux kernel
 # Where enabled by default, they can be disabled by using --without <opt> in
 # the rpmbuild command, or by forcing these values to 0.
 #
-# standard kernel
-%define with_up        %{?_without_up:        0} %{?!_without_up:        1}
 # build the base variants
 %define with_base      %{?_without_base:      0} %{?!_without_base:      1}
 # build also debug variants
 %define with_debug     %{?_without_debug:     0} %{?!_without_debug:     1}
-# kernel-zfcpdump (s390 specific kernel for zfcpdump)
-%define with_zfcpdump  %{?_without_zfcpdump:  0} %{?!_without_zfcpdump:  1}
-# kernel-16k (aarch64 kernel with 16K page_size)
-%define with_arm64_16k %{?_with_arm64_16k:    1} %{?!_with_arm64_16k:    0}
-# kernel-64k (aarch64 kernel with 64K page_size)
-%define with_arm64_64k %{?_without_arm64_64k: 0} %{?!_without_arm64_64k: 1}
-# kernel-rt (x86_64 and aarch64 only PREEMPT_RT enabled kernel)
-%define with_realtime  %{?_with_realtime:     1} %{?!_with_realtime:     0}
 
+# up standard kernel
+# kernel-zfcpdump (s390 specific kernel for zfcpdump)
+# kernel-16k (aarch64 kernel with 16K page_size)
+# kernel-64k (aarch64 kernel with 64K page_size)
+# kernel-rt (x86_64 and aarch64 only PREEMPT_RT enabled kernel)
+#
 # Supported variants
 #            with_base with_debug    with_gcov
 # up         X         X             X
@@ -216,6 +212,24 @@ Summary: The Linux kernel
 # arm64_16k  X         X             X
 # arm64_64k  X         X             X
 # realtime   X         X             X
+
+%if 0%{?fedora}
+{{for_each_variant VARIANT_FEDORA==1
+%define with_VARIANT_NAME %{?_without_VARIANT_NAME: 0} %{?!_without_VARIANT_NAME: 1}
+}}
+{{for_each_variant VARIANT_FEDORA==0
+%define with_VARIANT_NAME %{?_with_VARIANT_NAME: 1} %{?!_with_VARIANT_NAME: 0}
+}}
+%endif
+
+%if 0%{?rhel}
+{{for_each_variant VARIANT_RHEL==1
+%define with_VARIANT_NAME %{?_without_VARIANT_NAME: 0} %{?!_without_VARIANT_NAME: 1}
+}}
+{{for_each_variant VARIANT_RHEL==0
+%define with_VARIANT_NAME %{?_with_VARIANT_NAME: 1} %{?!_with_VARIANT_NAME: 0}
+}}
+%endif
 
 # kernel-doc
 %define with_doc       %{?_without_doc:       0} %{?!_without_doc:       1}
