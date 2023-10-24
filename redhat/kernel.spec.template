@@ -315,9 +315,6 @@ Summary: The Linux kernel
 %define with_ipaclones 0
 # no stablelist
 %define with_kernel_abi_stablelists 0
-# No realtime fedora variants
-%define with_realtime 0
-%define with_arm64_64k 0
 %endif
 
 %if %{with_verbose}
@@ -398,7 +395,6 @@ Summary: The Linux kernel
 # if requested, only build base kernel
 %if %{with_baseonly}
 %define with_debug 0
-%define with_realtime 0
 %define with_vdso_install 0
 %define with_perf 0
 %define with_libperf 0
@@ -479,8 +475,6 @@ Summary: The Linux kernel
 
 # don't build noarch kernels or headers (duh)
 %ifarch noarch
-%define with_up 0
-%define with_realtime 0
 %define with_headers 0
 %define with_cross_headers 0
 %define with_tools 0
@@ -494,11 +488,6 @@ Summary: The Linux kernel
 # sparse blows up on ppc
 %ifnarch ppc64le
 %define with_sparse 0
-%endif
-
-%if 0%{?fedora}
-# This is not for Fedora
-%define with_zfcpdump 0
 %endif
 
 # disable variants for unsupported arches
