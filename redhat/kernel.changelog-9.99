@@ -1,3 +1,10 @@
+* Fri Dec 22 2023 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.7.0-0.rc6.24e0d2e527a3.52]
+- fedora: a few cleanups and driver enablements (Peter Robinson)
+- fedora: arm64: cleanup Allwinner Pinctrl drivers (Peter Robinson)
+- fedora: aarch64: Enable some DW drivers (Peter Robinson)
+- Linux v6.7.0-0.rc6.24e0d2e527a3
+Resolves: 
+
 * Thu Dec 21 2023 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.7.0-0.rc6.a4aebe936554.51]
 - redhat: ship all the changelog from source git into kernel-doc (Herton R. Krzesinski)
 - redhat: create an empty changelog file when changing its name (Herton R. Krzesinski)
