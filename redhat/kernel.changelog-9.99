@@ -1,3 +1,7 @@
+* Sat Dec 23 2023 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.7.0-0.rc6.5254c0cbc92d.53]
+- Linux v6.7.0-0.rc6.5254c0cbc92d
+Resolves: 
+
 * Fri Dec 22 2023 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.7.0-0.rc6.24e0d2e527a3.52]
 - fedora: a few cleanups and driver enablements (Peter Robinson)
 - fedora: arm64: cleanup Allwinner Pinctrl drivers (Peter Robinson)
