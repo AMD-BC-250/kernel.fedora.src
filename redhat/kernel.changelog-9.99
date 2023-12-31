@@ -1,3 +1,7 @@
+* Sun Dec 31 2023 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.7.0-0.rc7.453f5db0619e.60]
+- Linux v6.7.0-0.rc7.453f5db0619e
+Resolves: 
+
 * Sat Dec 30 2023 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.7.0-0.rc7.f016f7547aee.59]
 - Auto consolidate configs for the 6.7 cycle (Justin M. Forbes)
 - Linux v6.7.0-0.rc7.f016f7547aee
