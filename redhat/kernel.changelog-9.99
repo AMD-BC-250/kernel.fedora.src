@@ -1,3 +1,7 @@
+* Tue Jan 02 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.7.0-0.rc8.62]
+- redhat: do not compress the full kernel changelog in the src.rpm (Herton R. Krzesinski)
+Resolves: 
+
 * Mon Jan 01 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.7.0-0.rc8.61]
 - Linux v6.7.0-0.rc8
 Resolves: 
