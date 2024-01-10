@@ -1,3 +1,7 @@
+* Wed Jan 10 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.8.0-0.rc0.ab27740f7665.4]
+- random: replace import_single_range() with import_ubuf() (Justin M. Forbes)
+Resolves: 
+
 * Wed Jan 10 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.8.0-0.rc0.ab27740f7665.3]
 - Flip CONFIG_INTEL_PMC_CORE to m for Fedora (Justin M. Forbes)
 - Add CONFIG_ZRAM_TRACK_ENTRY_ACTIME=y to avoid a mismatch (Justin M. Forbes)
