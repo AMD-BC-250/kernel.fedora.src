@@ -1,3 +1,7 @@
+* Sun Jan 21 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.8.0-0.rc0.7a396820222d.11]
+- Remove CONFIG_NET_EMATCH_STACK file for RHEL (Justin M. Forbes)
+Resolves: 
+
 * Sun Jan 21 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.8.0-0.rc0.7a396820222d.10]
 - CONFIG_NETFS_SUPPORT should be m after the merge (Justin M. Forbes)
 - Turn FSCACHE and NETFS from m to y in pending (Justin M. Forbes)
