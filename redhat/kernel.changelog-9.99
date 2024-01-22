@@ -1,3 +1,7 @@
+* Mon Jan 22 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.8.0-0.rc1.12]
+- Remove CONFIG_NET_EMATCH_STACK file for RHEL (Justin M. Forbes)
+Resolves: 
+
 * Mon Jan 22 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.8.0-0.rc1.11]
 - Linux v6.8.0-0.rc1
 Resolves: 
