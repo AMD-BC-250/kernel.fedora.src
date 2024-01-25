@@ -1,3 +1,10 @@
+* Thu Jan 25 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.8.0-0.rc1.6098d87eaf31.15]
+- Remove separate license tag for libperf (Justin M. Forbes)
+- Don't use upstream bpftool version for Fedora package (Justin M. Forbes)
+- Don't ship libperf.a in libperf-devel (Justin M. Forbes)
+- add libperf packages and enable perf, libperf, tools and bpftool packages (Thorsten Leemhuis)
+Resolves: 
+
 * Thu Jan 25 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.8.0-0.rc1.6098d87eaf31.14]
 - redhat/Makefile: fix setup-source and document its caveat (Ondrej Mosnacek)
 - redhat/Makefile: fix race condition when making the KABI tarball (Ondrej Mosnacek)
