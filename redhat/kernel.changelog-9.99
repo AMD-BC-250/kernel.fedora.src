@@ -1,3 +1,10 @@
+* Sat Jan 27 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.8.0-0.rc1.3a5879d495b2.17]
+- Remove separate license tag for libperf (Justin M. Forbes)
+- Don't use upstream bpftool version for Fedora package (Justin M. Forbes)
+- Don't ship libperf.a in libperf-devel (Justin M. Forbes)
+- add libperf packages and enable perf, libperf, tools and bpftool packages (Thorsten Leemhuis)
+Resolves: 
+
 * Sat Jan 27 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.8.0-0.rc1.3a5879d495b2.16]
 - Revert "Merge branch 'fix-kabi-build-race' into 'os-build'" (Justin M. Forbes)
 - Linux v6.8.0-0.rc1.3a5879d495b2
