@@ -1,3 +1,8 @@
+* Sun Feb 04 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.8.0-0.rc3.26]
+- tools/rv: Fix Makefile compiler options for clang (Daniel Bristot de Oliveira)
+- tools/rtla: Fix Makefile compiler options for clang (Daniel Bristot de Oliveira)
+Resolves: 
+
 * Sun Feb 04 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.8.0-0.rc3.25]
 - Remove defines forcing tools on, they override cmdline (Justin M. Forbes)
 - Remove separate license tag for libperf (Justin M. Forbes)
