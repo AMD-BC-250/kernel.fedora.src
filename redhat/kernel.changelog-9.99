@@ -1,3 +1,8 @@
+* Sun Feb 11 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.8.0-0.rc3.7521f258ea30.33]
+- tools/rv: Fix Makefile compiler options for clang (Daniel Bristot de Oliveira)
+- tools/rtla: Fix Makefile compiler options for clang (Daniel Bristot de Oliveira)
+Resolves: 
+
 * Sun Feb 11 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.8.0-0.rc3.7521f258ea30.32]
 - Linux v6.8.0-0.rc3.7521f258ea30
 Resolves: 
