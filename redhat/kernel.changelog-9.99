@@ -1,3 +1,8 @@
+* Mon Feb 12 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.8.0-0.rc4.34]
+- tools/rv: Fix Makefile compiler options for clang (Daniel Bristot de Oliveira)
+- tools/rtla: Fix Makefile compiler options for clang (Daniel Bristot de Oliveira)
+Resolves: 
+
 * Mon Feb 12 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.8.0-0.rc4.33]
 - fedora: Enable more Renesas RZ platform drivers (Peter Robinson)
 - fedora: a few aarch64 drivers and cleanups (Peter Robinson)
