@@ -1,3 +1,7 @@
+* Wed Feb 14 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.8.0-0.rc4.7e90b5c295ec.37]
+- Flip secureboot signature order (Justin M. Forbes)
+Resolves: 
+
 * Wed Feb 14 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.8.0-0.rc4.7e90b5c295ec.36]
 - Turn off CONFIG_INTEL_VSC for Fedora (Justin M. Forbes)
 - Linux v6.8.0-0.rc4.7e90b5c295ec
