@@ -1,3 +1,7 @@
+* Thu Feb 22 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.8.0-0.rc5.39133352cbed.44]
+- Add libperf-debuginfo subpackage (Justin M. Forbes)
+Resolves: 
+
 * Thu Feb 22 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.8.0-0.rc5.39133352cbed.43]
 - redhat/self-test: Update CROSS_DISABLED_PACKAGES (Prarit Bhargava)
 - redhat: Do not build libperf with cross builds (Prarit Bhargava)
