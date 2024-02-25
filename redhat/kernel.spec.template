@@ -244,7 +244,7 @@ Summary: The Linux kernel
 # Only build the debug variants (--with dbgonly):
 %define with_dbgonly   %{?_with_dbgonly:      1} %{?!_with_dbgonly:      0}
 # Only build the realtime kernel (--with rtonly):
-%define with_rtonly    %{?_with_rtonly:       1} %{?!_with_rtonly:       0}
+%define with_rtonly    %{?_with_rtonly:       0} %{?!_with_rtonly:       1}
 # Control whether we perform a compat. check against published ABI.
 %define with_kabichk   %{?_without_kabichk:   0} %{?!_without_kabichk:   1}
 # Temporarily disable kabi checks until RC.
