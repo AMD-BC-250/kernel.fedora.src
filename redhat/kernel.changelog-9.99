@@ -1,3 +1,7 @@
+* Mon Feb 26 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.8.0-0.rc5.ab0a97cffa0b.48]
+- Add libperf-debuginfo subpackage (Justin M. Forbes)
+Resolves: 
+
 * Mon Feb 26 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.8.0-0.rc5.ab0a97cffa0b.47]
 - Enable merge-rt pipeline (Don Zickus)
 - kernel.spec: include the GDB plugin in kernel-debuginfo (Ondrej Mosnacek)
