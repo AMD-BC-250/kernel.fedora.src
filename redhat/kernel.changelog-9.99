@@ -1,3 +1,8 @@
+* Wed Feb 28 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.8.0-0.rc6.cf1182944c7c.51]
+- Revert "net: bump CONFIG_MAX_SKB_FRAGS to 45" (Marcelo Ricardo Leitner)
+- Add libperf-debuginfo subpackage (Justin M. Forbes)
+Resolves: 
+
 * Wed Feb 28 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.8.0-0.rc6.cf1182944c7c.50]
 - Linux v6.8.0-0.rc6.cf1182944c7c
 Resolves: 
