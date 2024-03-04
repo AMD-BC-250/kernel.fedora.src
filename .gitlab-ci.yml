@@ -52,6 +52,9 @@ workflow:
   only-os-build-schedule: &only-os-build-schedule
     if: $CI_COMMIT_BRANCH != "os-build" || $CI_PIPELINE_SOURCE != "schedule"
     when: never
+  only-test-os-build-schedule: &only-test-os-build-schedule
+    if: $CI_COMMIT_BRANCH != "test-os-build" || $CI_PIPELINE_SOURCE != "schedule"
+    when: never
   only-ark-latest-head: &only-ark-latest-head
     if: $CI_COMMIT_BRANCH != "ark-latest" || $CI_PIPELINE_SOURCE !~ /push|web/
     when: never
@@ -621,7 +624,7 @@ merge_rt_automotive:
     - DIST_PUSH=1 redhat/scripts/ci/ark-merge-rt.sh
   retry: 2
   rules:
-    - *only-os-build-schedule
+    - *only-test-os-build-schedule
     - if: $RAWHIDE_RELEASE == "rt"
 
 docs:
