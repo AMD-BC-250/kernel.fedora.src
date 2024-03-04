@@ -620,7 +620,7 @@ merge_rt_automotive:
     - git checkout --track origin/os-build-rt-devel && git describe
     - git checkout --track origin/os-build-automotive-devel && git describe
     # make sure we are on correct code base before running script
-    - git checkout os-build  && git describe
+    - git checkout test-os-build  && git describe
     - DIST_PUSH=1 redhat/scripts/ci/ark-merge-rt.sh
   retry: 2
   rules:
