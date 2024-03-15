@@ -174,7 +174,7 @@ static inline void rwsem_assert_held_nolockdep(const struct rw_semaphore *sem)
 
 static inline void rwsem_assert_held_write_nolockdep(const struct rw_semaphore *sem)
 {
-	rw_base_assert_held_write(sem);
+	rw_base_assert_held_write(&sem->rwbase);
 }
 
 static __always_inline int rwsem_is_contended(struct rw_semaphore *sem)
