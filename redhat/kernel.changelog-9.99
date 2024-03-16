@@ -1,3 +1,10 @@
+* Sat Mar 16 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.9.0-0.rc0.66a27abac311.8]
+- arch/x86/kernel/setup.c: fixup rh_check_supported (Scott Weaver)
+- Add new of_test module to mod-internal.list (Thorsten Leemhuis)
+- Add new string kunit modules to mod-internal.list (Thorsten Leemhuis)
+- Add drm_gem_shmem_test to mod-internal.list (Thorsten Leemhuis)
+Resolves: 
+
 * Sat Mar 16 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.9.0-0.rc0.66a27abac311.7]
 - Enable CONFIG_USB_ONBOARD_HUB for RHEL (Charles Mirabile)
 - redhat/Makefile.cross: Add CROSS_BASEONLY (Prarit Bhargava)
