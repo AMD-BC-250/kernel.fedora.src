@@ -1,3 +1,10 @@
+* Mon Mar 18 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.9.0-0.rc0.f6cef5f8c37f.10]
+- arch/x86/kernel/setup.c: fixup rh_check_supported (Scott Weaver)
+- Add new of_test module to mod-internal.list (Thorsten Leemhuis)
+- Add new string kunit modules to mod-internal.list (Thorsten Leemhuis)
+- Add drm_gem_shmem_test to mod-internal.list (Thorsten Leemhuis)
+Resolves: 
+
 * Mon Mar 18 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.9.0-0.rc0.f6cef5f8c37f.9]
 - Linux v6.9.0-0.rc0.f6cef5f8c37f
 Resolves: 
