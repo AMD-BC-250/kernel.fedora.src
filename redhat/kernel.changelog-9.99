@@ -1,3 +1,8 @@
+* Fri Mar 22 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.9.0-0.rc0.23956900041d.13]
+- redhat/kernel.spec.template: add extra flags for tools build (Scott Weaver)
+- Add iio-test-gts to mod-internal.list (Thorsten Leemhuis)
+Resolves: 
+
 * Thu Mar 21 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.9.0-0.rc0.23956900041d.12]
 - Linux v6.9.0-0.rc0.23956900041d
 Resolves: 
