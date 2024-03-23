@@ -1,3 +1,8 @@
+* Sat Mar 23 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.9.0-0.rc0.bfa8f18691ed.15]
+- redhat/kernel.spec.template: add extra flags for tools build (Scott Weaver)
+- Add iio-test-gts to mod-internal.list (Thorsten Leemhuis)
+Resolves: 
+
 * Sat Mar 23 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.9.0-0.rc0.bfa8f18691ed.14]
 - Enable DRM_CDNS_DSI_J721E for fedora (Andrew Halaney)
 - Linux v6.9.0-0.rc0.bfa8f18691ed
