@@ -1,3 +1,9 @@
+* Sun Mar 24 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.9.0-0.rc0.70293240c5ce.16]
+- redhat/kernel.spec.template: update license (Scott Weaver)
+- redhat/kernel.spec.template: add extra flags for tools build (Scott Weaver)
+- Add iio-test-gts to mod-internal.list (Thorsten Leemhuis)
+Resolves: 
+
 * Sun Mar 24 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.9.0-0.rc0.70293240c5ce.15]
 - Linux v6.9.0-0.rc0.70293240c5ce
 Resolves: 
