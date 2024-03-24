@@ -4,6 +4,7 @@
 
 #include <linux/rtmutex.h>
 #include <linux/atomic.h>
+#include <linux/bug.h>
 
 #define READER_BIAS		(1U << 31)
 #define WRITER_BIAS		(1U << 30)
