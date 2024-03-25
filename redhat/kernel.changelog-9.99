@@ -15,30 +15,35 @@ Resolves:
 - redhat/kernel.spec.template: add extra flags for tools build (Scott Weaver)
 - Add iio-test-gts to mod-internal.list (Thorsten Leemhuis)
 - Linux v6.9.0-0.rc1.928a87efa423
-Resolves: 
+Resolves:
+
+* Mon Mar 25 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.9.0-0.rc1.17]
+- redhat/kernel.spec.template: add extra flags for tools build (Scott Weaver)
+- Add iio-test-gts to mod-internal.list (Thorsten Leemhuis)
+Resolves:
 
 * Mon Mar 25 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.9.0-0.rc1.16]
 - redhat/kernel.spec.template: update license (Scott Weaver)
 - Fix typo in maintaining.rst file (Augusto Caringi)
 - Linux v6.9.0-0.rc1
-Resolves: 
+Resolves:
 
 * Sun Mar 24 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.9.0-0.rc0.70293240c5ce.15]
 - Linux v6.9.0-0.rc0.70293240c5ce
-Resolves: 
+Resolves:
 
 * Sat Mar 23 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.9.0-0.rc0.bfa8f18691ed.14]
 - Enable DRM_CDNS_DSI_J721E for fedora (Andrew Halaney)
 - Linux v6.9.0-0.rc0.bfa8f18691ed
-Resolves: 
+Resolves:
 
 * Fri Mar 22 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.9.0-0.rc0.8e938e398669.13]
 - Linux v6.9.0-0.rc0.8e938e398669
-Resolves: 
+Resolves:
 
 * Thu Mar 21 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.9.0-0.rc0.23956900041d.12]
 - Linux v6.9.0-0.rc0.23956900041d
-Resolves: 
+Resolves:
 
 * Wed Mar 20 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.9.0-0.rc0.a4145ce1e7bc.11]
 - gitlab-ci: do not merge ark-latest for gating pipelines (Michael Hofmann)
@@ -48,46 +53,46 @@ Resolves:
 - Add new of_test module to mod-internal.list (Thorsten Leemhuis)
 - Add new string kunit modules to mod-internal.list (Thorsten Leemhuis)
 - Linux v6.9.0-0.rc0.a4145ce1e7bc
-Resolves: 
+Resolves:
 
 * Tue Mar 19 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.9.0-0.rc0.b3603fcb79b1.10]
 - redhat/kernel.spec.template: enable cross for base/RT (Peter Robinson)
 - redhat/kernel.spec.template: Fix cross compiling (Peter Robinson)
 - arch/x86/kernel/setup.c: fixup rh_check_supported (Scott Weaver)
 - Linux v6.9.0-0.rc0.b3603fcb79b1
-Resolves: 
+Resolves:
 
 * Mon Mar 18 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.9.0-0.rc0.f6cef5f8c37f.9]
 - Linux v6.9.0-0.rc0.f6cef5f8c37f
-Resolves: 
+Resolves:
 
 * Sun Mar 17 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.9.0-0.rc0.741e9d668aa5.8]
 - Linux v6.9.0-0.rc0.741e9d668aa5
-Resolves: 
+Resolves:
 
 * Sat Mar 16 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.9.0-0.rc0.66a27abac311.7]
 - Enable CONFIG_USB_ONBOARD_HUB for RHEL (Charles Mirabile)
 - redhat/Makefile.cross: Add CROSS_BASEONLY (Prarit Bhargava)
 - gitlab-ci: fix ark-latest merging for parent pipelines running in forks (Michael Hofmann)
 - Linux v6.9.0-0.rc0.66a27abac311
-Resolves: 
+Resolves:
 
 * Fri Mar 15 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.9.0-0.rc0.e5eb28f6d1af.6]
 - Linux v6.9.0-0.rc0.e5eb28f6d1af
-Resolves: 
+Resolves:
 
 * Fri Mar 15 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.9.0-0.rc0.480e035fc4c7.5]
 - lsm: update security_lock_kernel_down (Scott Weaver)
-Resolves: 
+Resolves:
 
 * Thu Mar 14 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.9.0-0.rc0.480e035fc4c7.4]
 - Linux v6.9.0-0.rc0.480e035fc4c7
-Resolves: 
+Resolves:
 
 * Wed Mar 13 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.9.0-0.rc0.b0546776ad3f.3]
 - Fix changelog after rebase (Augusto Caringi)
 - Linux v6.9.0-0.rc0.b0546776ad3f
-Resolves: 
+Resolves:
 
 * Tue Mar 12 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.9.0-0.rc0.855684c7d938.2]
 - redhat: remove "END OF CHANGELOG" marker from kernel.changelog (Herton R. Krzesinski)
@@ -2359,4 +2364,3 @@ Resolves:
 - [initial commit] Add Makefiles (Laura Abbott)
 - Linux v6.9.0-0.rc0.855684c7d938
 Resolves: rhbz#1471185, rhbz#1495307, rhbz#1509329, rhbz#1518076, rhbz#1518874, rhbz#1519554, rhbz#1546831, rhbz#1559877, rhbz#1561171, rhbz#1563590, rhbz#1565704, rhbz#1565717, rhbz#1572321, rhbz#1574502, rhbz#1590829, rhbz#1595918, rhbz#1598366, rhbz#1602033, rhbz#1609604, rhbz#1610493, rhbz#1613522, rhbz#1638087, rhbz#1652256, rhbz#1652266, rhbz#1663728, rhbz#1670017, rhbz#1722136, rhbz#1730649, rhbz#1802694, rhbz#1810301, rhbz#1821565, rhbz#1831065, rhbz#1855161, rhbz#1856174, rhbz#1856176, rhbz#1858592, rhbz#1858594, rhbz#1858596, rhbz#1858599, rhbz#1869674, rhbz#1871130, rhbz#1876435, rhbz#1876436, rhbz#1876977, rhbz#1877192, rhbz#1880486, rhbz#1890304, rhbz#1903201, rhbz#1915073, rhbz#1915290, rhbz#1930649, rhbz#1939095, rhbz#1940075, rhbz#1940794, rhbz#1943423, rhbz#1945002, rhbz#1945179, rhbz#1945477, rhbz#1947240, rhbz#1948340, rhbz#1952426, rhbz#1952863, rhbz#1953486, rhbz#1956988, rhbz#1957210, rhbz#1957219, rhbz#1957305, rhbz#1957636, rhbz#1957819, rhbz#1961178, rhbz#1962936, rhbz#1964537, rhbz#1967640, rhbz#1972795, rhbz#1976270, rhbz#1976835, rhbz#1976877, rhbz#1976884, rhbz#1977056, rhbz#1977529, rhbz#1978539, rhbz#1979379, rhbz#1981406, rhbz#1983298, rhbz#1986223, rhbz#1988254, rhbz#1988384, rhbz#1990040, rhbz#1993393, rhbz#1994858, rhbz#1998953, rhbz#2000835, rhbz#2002344, rhbz#2004233, rhbz#2004821, rhbz#2006813, rhbz#2007430, rhbz#2012226, rhbz#2014492, rhbz#2019377, rhbz#2020132, rhbz#2022578, rhbz#2023782, rhbz#2024595, rhbz#2025985, rhbz#2026319, rhbz#2027506, rhbz#2031547, rhbz#2032758, rhbz#2034670, rhbz#2038999, rhbz#2040643, rhbz#2041184, rhbz#2041186, rhbz#2041365, rhbz#2041990, rhbz#2042240, rhbz#2042241, rhbz#2043141, rhbz#2044155, rhbz#2053836, rhbz#2054579, rhbz#2062054, rhbz#2062909, rhbz#2071969, rhbz#2089765, rhbz#2115876, rhbz#2120968, rhbz#2122595, rhbz#2140017, rhbz#2142658, rhbz#2149273, rhbz#2153073, rhbz#2166911, rhbz#2188441, rhbz#2208834, rhbz#2216678, rhbz#2227793, rhbz#2231407, rhbz#2233269
-
