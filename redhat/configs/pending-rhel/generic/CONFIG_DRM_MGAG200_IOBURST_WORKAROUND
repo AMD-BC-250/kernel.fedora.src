@@ -1,0 +1,15 @@
+# Symbol: DRM_MGAG200_IOBURST_WORKAROUND [=n]
+# Type  : bool
+# Defined at drivers/gpu/drm/mgag200/Kconfig:15
+#   Prompt: Disable buffer caching
+#   Depends on: HAS_IOMEM [=y] && DRM_MGAG200 [=m] && PREEMPT_RT [=y] && X86 [=y]
+#   Location:
+#     -> Device Drivers
+#       -> Graphics support
+#         -> Matrox G200 (DRM_MGAG200 [=m])
+#           -> Disable buffer caching (DRM_MGAG200_IOBURST_WORKAROUND [=n])
+# 
+# 
+# 
+# Commit: bfa4437fd393 (drm/mgag200: Add a workaround for low-latency)
+# CONFIG_DRM_MGAG200_IOBURST_WORKAROUND is not set
