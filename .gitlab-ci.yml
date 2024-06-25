@@ -13,6 +13,11 @@ include:
     ref: production
     file: .gitlab/ci_templates/interruptible.yml
     rules: [{if: $CI_PIPELINE_SOURCE == "merge_request_event"}]
+  - local: redhat/gitlab/schedule-environment.yml
+    rules: [{if: $CI_PIPELINE_SOURCE == "schedule"}]
+  # TEMP
+  - local: redhat/gitlab/schedule-environment.yml
+    rules: [{if: $CI_PIPELINE_SOURCE != "schedule"}]
 
 workflow:
   name: $PIPELINE_NAME
@@ -283,39 +288,6 @@ workflow:
     package_name: kernel-automotive
     architectures: x86_64 aarch64
 
-# Rawhide CI
-rawhide_merge_request:
-  extends: [.merge_request, .trigger_rawhide, .no_tests, .merge_ark_latest, .srpm_for_bot,
-            .rawhide_up]
-
-rawhide_debug_merge_request:
-  extends: [.merge_request, .trigger_rawhide, .no_tests, .merge_ark_latest, .manual_for_bot,
-            .rawhide_up_debug]
-
-rawhide_16k_merge_request:
-  extends: [.merge_request, .trigger_rawhide, .no_tests, .merge_ark_latest, .manual_for_bot,
-            .rawhide_16k]
-
-rawhide_16k_debug_merge_request:
-  extends: [.merge_request, .trigger_rawhide, .no_tests, .merge_ark_latest, .manual_for_bot,
-            .rawhide_16k_debug]
-
-rawhide_clang_merge_request:
-  extends: [.merge_request, .trigger_rawhide, .no_tests, .merge_ark_latest, .manual_for_bot,
-            .rawhide_clang_up]
-
-rawhide_clang_debug_merge_request:
-  extends: [.merge_request, .trigger_rawhide, .no_tests, .merge_ark_latest, .manual_for_bot,
-            .rawhide_clang_up_debug]
-
-rawhide_clanglto_merge_request:
-  extends: [.merge_request, .trigger_rawhide, .no_tests, .merge_ark_latest, .manual_for_bot,
-            .rawhide_clanglto_up]
-
-rawhide_clanglto_debug_merge_request:
-  extends: [.merge_request, .trigger_rawhide, .no_tests, .merge_ark_latest, .manual_for_bot,
-            .rawhide_clanglto_up_debug]
-
 # Rawhide baselines
 rawhide_baseline:
   extends: [.baseline, .trigger_rawhide, .reported_tests, .ark_latest_head,
@@ -381,39 +353,6 @@ rawhide_clanglto_cki_gating:
 rawhide_clanglto_debug_cki_gating:
   extends: [.baseline, .trigger_rawhide, .no_tests, .cki_gating_head,
             .rawhide_clanglto_up_debug, .cki_gating_overrides]
-
-# ELN CI
-eln_merge_request:
-  extends: [.merge_request, .trigger_eln, .no_tests, .merge_ark_latest, .srpm_for_bot,
-            .eln_up]
-
-eln_debug_merge_request:
-  extends: [.merge_request, .trigger_eln, .no_tests, .merge_ark_latest, .manual_for_bot,
-            .eln_up_debug]
-
-# eln_clang_merge_request:
-#   extends: [.merge_request, .trigger_eln, .no_tests, .merge_ark_latest, .manual_for_bot,
-#             .eln_clang_up]
-#
-# eln_clang_debug_merge_request:
-#   extends: [.merge_request, .trigger_eln, .no_tests, .merge_ark_latest, .manual_for_bot,
-#             .eln_clang_up_debug]
-
-eln_realtime_merge_request:
-  extends: [.merge_request, .trigger_eln, .no_tests, .merge_ark_latest, .manual_for_bot,
-            .eln_rt]
-
-eln_realtime_debug_merge_request:
-  extends: [.merge_request, .trigger_eln, .no_tests, .merge_ark_latest, .manual_for_bot,
-            .eln_rt_debug]
-
-eln_64k_merge_request:
-  extends: [.merge_request, .trigger_eln, .no_tests, .merge_ark_latest, .manual_for_bot,
-            .eln_64k]
-
-eln_64k_debug_merge_request:
-  extends: [.merge_request, .trigger_eln, .no_tests, .merge_ark_latest, .manual_for_bot,
-            .eln_64k_debug]
 
 # ELN baselines
 eln_baseline:
@@ -481,39 +420,6 @@ eln_64k_debug_cki_gating:
   extends: [.baseline, .trigger_eln, .no_tests, .cki_gating_head,
             .eln_64k_debug, .cki_gating_overrides]
 
-# c10s CI
-c10s_merge_request:
-  extends: [.merge_request, .trigger_c10s, .no_tests, .merge_ark_latest, .srpm_for_bot,
-            .eln_up]
-
-c10s_debug_merge_request:
-  extends: [.merge_request, .trigger_c10s, .no_tests, .merge_ark_latest, .manual_for_bot,
-            .eln_up_debug]
-
-# c10s_clang_merge_request:
-#   extends: [.merge_request, .trigger_c10s, .no_tests, .merge_ark_latest, .manual_for_bot,
-#             .eln_clang_up]
-#
-# c10s_clang_debug_merge_request:
-#   extends: [.merge_request, .trigger_c10s, .no_tests, .merge_ark_latest, .manual_for_bot,
-#             .eln_clang_up_debug]
-
-c10s_realtime_merge_request:
-  extends: [.merge_request, .trigger_c10s, .no_tests, .merge_ark_latest, .manual_for_bot,
-            .eln_rt]
-
-c10s_realtime_debug_merge_request:
-  extends: [.merge_request, .trigger_c10s, .no_tests, .merge_ark_latest, .manual_for_bot,
-            .eln_rt_debug]
-
-c10s_64k_merge_request:
-  extends: [.merge_request, .trigger_c10s, .no_tests, .merge_ark_latest, .manual_for_bot,
-            .eln_64k]
-
-c10s_64k_debug_merge_request:
-  extends: [.merge_request, .trigger_c10s, .no_tests, .merge_ark_latest, .manual_for_bot,
-            .eln_64k_debug]
-
 # c10s baselines
 c10s_baseline:
   extends: [.baseline, .trigger_c10s, .reported_tests, .ark_latest_head,
@@ -580,75 +486,81 @@ c10s_64k_debug_cki_gating:
   extends: [.baseline, .trigger_c10s, .no_tests, .cki_gating_head,
             .eln_64k_debug, .cki_gating_overrides]
 
-# automotive/c10s CI on os-build-automotive-devel
-c10s_automotive_merge_request:
-  extends: [.merge_request, .trigger_c10s, .no_tests, .os_build_automotive_devel_mr,
-            .eln_automotive]
+.scripts:
+  git_setup: |
+    git config user.name "Fedora Kernel Team"
+    git config user.email "kernel-team@fedoraproject.org"
+    mkdir --mode 700 --parents ~/.ssh
+    echo "${GITLAB_KNOWN_HOSTS}" > ~/.ssh/known_hosts
+    chmod 644 ~/.ssh/known_hosts
+    if [[ -n ${PRIVATE_KEY} ]]; then
+      eval $(ssh-agent -s)
+      ssh-add -q - <<< "${PRIVATE_KEY}"
+    fi
+  repo_setup: |
+    echo "$PYTHON_GITLAB_CONFIG" >> ~/.python-gitlab.cfg
+    git remote add gitlab https://gitlab.com/cki-project/kernel-ark.git
+    git remote set-url --push gitlab git@gitlab.com:cki-project/kernel-ark.git
+    gpg2 --import "$TORVALDS_GPG_KEY"
+    git checkout --track origin/master && git describe
+    git checkout --track origin/os-build && git describe
+    export PROJECT_ID="$CI_PROJECT_ID"
 
-c10s_automotive_debug_merge_request:
-  extends: [.merge_request, .trigger_c10s, .no_tests, .os_build_automotive_devel_mr,
-            .eln_automotive_debug]
-
-.git_setup:
-  - git config user.name "Fedora Kernel Team"
-  - git config user.email "kernel-team@fedoraproject.org"
-  - mkdir --mode 700 --parents ~/.ssh
-  - echo "${GITLAB_KNOWN_HOSTS}" > ~/.ssh/known_hosts
-  - chmod 644 ~/.ssh/known_hosts
-  - eval $(ssh-agent -s)
-  - ssh-add -q - <<< "${PRIVATE_KEY}"
-
-# scheduled job
-.scheduled_setup:
+# scheduled jobs, manual dry-runs on MRs
+.maintenance:
   image: quay.io/cki/cki-tools:production
   variables:
     GIT_DEPTH: "0"
     GIT_CLONE_PATH: $CI_BUILDS_DIR/$CI_CONCURRENT_ID/kernel-ark
-  before_script:
-    - !reference [.git_setup]
-    - echo "$PYTHON_GITLAB_CONFIG" >> ~/.python-gitlab.cfg
-    - git remote add gitlab https://gitlab.com/cki-project/kernel-ark.git
-    - git remote set-url --push gitlab git@gitlab.com:cki-project/kernel-ark.git
-    - gpg2 --import "$TORVALDS_GPG_KEY"
-    - git checkout --track origin/master && git describe
-    - git checkout --track origin/os-build && git describe
-    - export PROJECT_ID="$CI_PROJECT_ID"
-
-merge_upstream:
-  extends: .scheduled_setup
-  script:
-    - DIST_PUSH=1 redhat/scripts/ci/ark-update-configs.sh
+    DISTRO: fedora
+    GITLAB_KNOWN_HOSTS: |
+      gitlab.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAfuCHKVTjquxvt6CM6tdG4SLp1Btn/nOeHHE5UOzRdf
+      gitlab.com ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCsj2bNKTBSpIYDEGk9KxsGh3mySTRgMtXL583qmBpzeQ+jqCMRgBqB98u3z++J1sKlXHWfM9dyhSevkMwSbhoR8XIq/U0tCNyokEi/ueaBMCvbcTHhO7FcwzY92WK4Yt0aGROY5qX2UKSeOvuP4D6TPqKF1onrSzH9bx9XUf2lEdWT/ia1NEKjunUqu1xOB/StKDHMoX4/OKyIzuS0q/T1zOATthvasJFoPrAjkohTyaDUz2LN5JoH839hViyEG82yB+MjcFV5MU3N1l1QL3cVUCh93xSaua1N85qivl+siMkPGbO5xR/En4iEY6K2XPASUEMaieWVNTRCtJ4S8H+9
+      gitlab.com ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBFSMqzJeV9rUzU4kWitGjeR4PWSa29SPqJ1fVkhtj3Hw9xjLVXVYrU9QlYWrOLXBpQ6KWjbjTDTdDkoohFzgbEY=
+    GITLAB_TOKEN: ''
+    PYTHON_GITLAB_CONFIG: |
+      [global]
+      default=gitlab.com
+      ssl_verify=true
+      timeout=30
+      [gitlab.com]
+      url=https://gitlab.com
+      private_token=$GITLAB_TOKEN
+    RHMAINTAINERS: redhat/rhdocs/MAINTAINERS/RHMAINTAINERS
   retry: 2
+  before_script:
+    - !reference [.scripts, git_setup]
+    - !reference [.scripts, repo_setup]
   rules:
+    - *manual-on-mr
     - *only-os-build-schedule
-    - if: $RAWHIDE_RELEASE == "false"
+    - if: $SCHEDULED_JOB_NAME == $CI_JOB_NAME
+      variables:
+        DIST_PUSH: '1'
 
-rawhide_release:
-  extends: .scheduled_setup
+merge-upstream:
+  extends: .maintenance
+  script:
+    - redhat/scripts/ci/ark-update-configs.sh
+
+rawhide-release:
+  extends: .maintenance
   script:
     - git checkout --track origin/ark-latest && git describe
     - git checkout --track origin/ark-infra && git describe
     # make sure we are on correct code base before running script
-    - git checkout os-build  && git describe
-    - DIST_PUSH=1 redhat/scripts/ci/ark-create-release.sh
-  retry: 2
-  rules:
-    - *only-os-build-schedule
-    - if: $RAWHIDE_RELEASE == "true"
+    - git checkout os-build && git describe
+    - redhat/scripts/ci/ark-create-release.sh
 
-merge_rt_automotive:
-  extends: .scheduled_setup
+merge-rt-automotive:
+  extends: .maintenance
   script:
     - git remote add linux-rt-devel git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git
     - git checkout --track origin/os-build-rt-devel && git describe
     - git checkout --track origin/os-build-automotive-devel && git describe
     # make sure we are on correct code base before running script
-    - git checkout os-build  && git describe
-    - DIST_PUSH=1 redhat/scripts/ci/ark-merge-rt.sh
-  retry: 2
-  rules:
-    - *only-os-build-schedule
-    - if: $RAWHIDE_RELEASE == "rt"
+    - git checkout os-build && git describe
+    - redhat/scripts/ci/ark-merge-rt.sh
 
 docs:
   image: quay.io/cki/cki-tools:production
@@ -679,8 +591,9 @@ pages:
 tag-cki-gating:
   image: quay.io/cki/cki-tools:production
   stage: deploy
+  environment: cki-gating
   script:
-    - !reference [.git_setup]
+    - !reference [.scripts, git_setup]
     - git fetch git@${CI_SERVER_HOST}:${CI_PROJECT_PATH}.git ark-latest
     - git merge --no-edit FETCH_HEAD
     - git push --force git@${CI_SERVER_HOST}:${CI_PROJECT_PATH}.git HEAD:refs/heads/cki-gating
