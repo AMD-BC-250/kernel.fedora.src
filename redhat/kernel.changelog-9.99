@@ -1,3 +1,7 @@
+* Sat Jul 06 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.10.0-0.rc6.1dd28064d416.56]
+- Add openssl-devel-engine as a buildrequirement. (Justin M. Forbes)
+Resolves: 
+
 * Sat Jul 06 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.10.0-0.rc6.1dd28064d416.55]
 - Linux v6.10.0-0.rc6.1dd28064d416
 Resolves: 
