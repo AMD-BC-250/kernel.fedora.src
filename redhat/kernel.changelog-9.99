@@ -1,3 +1,7 @@
+* Sat Jul 13 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.10.0-0.rc7.528dd46d0fc3.63]
+- fedora: disable CONFIG_DRM_WERROR (Patrick Talbert)
+Resolves: 
+
 * Sat Jul 13 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.10.0-0.rc7.528dd46d0fc3.62]
 - redhat/configs: Enable CONFIG_PTP_1588_CLOCK_MOCK in kernel-modules-internal (Davide Caratti)
 - fedora: enabled XE GPU drivers on all arches (Peter Robinson)
