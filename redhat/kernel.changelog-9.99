@@ -1,3 +1,7 @@
+* Mon Jul 22 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.11.0-0.rc0.720261cfc732.9]
+- fedora: disable CONFIG_DRM_WERROR (Patrick Talbert)
+Resolves: 
+
 * Mon Jul 22 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.11.0-0.rc0.720261cfc732.8]
 - rhel: cleanup unused media tuner configs (Peter Robinson)
 - all: cleanup MEDIA_CONTROLLER options (Peter Robinson)
