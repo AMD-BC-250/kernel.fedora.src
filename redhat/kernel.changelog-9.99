@@ -1,3 +1,7 @@
+* Fri Jul 26 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.11.0-0.rc0.1722389b0d86.14]
+- fedora: disable CONFIG_DRM_WERROR (Patrick Talbert)
+Resolves: 
+
 * Fri Jul 26 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.11.0-0.rc0.1722389b0d86.13]
 - gitlab-ci: restore bot pipeline behavior (Michael Hofmann)
 - redhat/kernel.spec: drop extra right curly bracket in kernel_kvm_package (Jan Stancek)
