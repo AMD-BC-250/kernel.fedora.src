@@ -1,3 +1,8 @@
+* Sat Jul 27 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.11.0-0.rc0.3a7e02c040b1.15]
+- rh_flags: constify the ctl_table argument of proc_handler (Scott Weaver)
+- fedora: disable CONFIG_DRM_WERROR (Patrick Talbert)
+Resolves: 
+
 * Sat Jul 27 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.11.0-0.rc0.3a7e02c040b1.14]
 - Linux v6.11.0-0.rc0.3a7e02c040b1
 Resolves: 
