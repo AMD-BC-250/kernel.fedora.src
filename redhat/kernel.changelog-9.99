@@ -1,3 +1,7 @@
+* Wed Jul 31 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.11.0-0.rc1.e4fc196f5ba3.18]
+- fedora: disable CONFIG_DRM_WERROR (Patrick Talbert)
+Resolves: 
+
 * Wed Jul 31 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.11.0-0.rc1.e4fc196f5ba3.17]
 - arm64: enable CRYPTO_DEV_TEGRA on RHEL (Peter Robinson)
 - redhat/kernel.spec: fix file listed twice warning for "kernel" subdir (Jan Stancek)
