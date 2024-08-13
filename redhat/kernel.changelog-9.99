@@ -1,3 +1,7 @@
+* Tue Aug 13 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.11.0-0.rc3.d74da846046a.31]
+- fedora: disable CONFIG_DRM_WERROR (Patrick Talbert)
+Resolves: 
+
 * Tue Aug 13 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.11.0-0.rc3.d74da846046a.30]
 - redhat: spec: add cachestat kselftest (Eric Chanudet)
 - redhat: hmac sign the UKI for FIPS (Vitaly Kuznetsov)
