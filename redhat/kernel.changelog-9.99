@@ -1,3 +1,7 @@
+* Tue Aug 20 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.11.0-0.rc4.6e4436539ae1.38]
+- Add weakdep support to the kernel spec (Justin M. Forbes)
+Resolves: 
+
 * Tue Aug 20 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.11.0-0.rc4.6e4436539ae1.37]
 - fedora: disable CONFIG_DRM_WERROR (Patrick Talbert)
 - Linux v6.11.0-0.rc4.6e4436539ae1
