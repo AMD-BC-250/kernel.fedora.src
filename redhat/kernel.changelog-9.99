@@ -1,3 +1,8 @@
+* Sat Aug 24 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.11.0-0.rc4.d2bafcf224f3.42]
+- Revert "pidfd: prevent creation of pidfds for kthreads" (Christian Brauner)
+- Add weakdep support to the kernel spec (Justin M. Forbes)
+Resolves: 
+
 * Sat Aug 24 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.11.0-0.rc4.d2bafcf224f3.41]
 - Linux v6.11.0-0.rc4.d2bafcf224f3
 Resolves: 
