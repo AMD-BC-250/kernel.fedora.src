@@ -1,3 +1,7 @@
+* Mon Aug 26 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.11.0-0.rc5.44]
+- Revert "pidfd: prevent creation of pidfds for kthreads" (Christian Brauner)
+Resolves: 
+
 * Mon Aug 26 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.11.0-0.rc5.43]
 - Add weakdep support to the kernel spec (Justin M. Forbes)
 - redhat: configs: disable PF_KEY in RHEL (Sabrina Dubroca)
