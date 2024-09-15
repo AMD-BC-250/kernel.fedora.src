@@ -1,0 +1,56 @@
+Name: 16k
+
+# list of target architectures for this kernel
+arch: aarch64
+
+# Flavor is currently restricted to Fedora or RHEL though new flavors
+# could be added in the future.
+
+Flavor: Fedora
+
+# Initial supported schedule options should be Always, Stable, None
+# and some language to describe various RHEL targets.
+Schedule: Never
+
+# True to build both the regular kernel and a debug kernel
+# False to build only the regular kernel
+Debug: True
+
+# Config parent is what config files are inherited to be the base of a new
+# flavor. None means we have a full config tree. Other options include
+# fedora, rhel, or rhel-rt which would take those configs and run the
+# config tool over an existing config to generate the new files.
+Config_Parent: None
+
+# Do we build a UKi for this variant? This might need to expand later as
+# we start using more versions of UKIs for hardware boot.
+UKI: False
+
+# Options to add new flags if needed.  We could also have override_ option
+# specifically for variants who want their own flags.
+Append_Cflags:
+Append_Ldflags:
+
+# Snippet for the RPM Summary field. Assume we will start with "The Linux
+# kernel compiled for "
+Summary: "16k pagesize usage"
+
+# RPM Description field for the variant packages. Subpackages will auto
+# append to this main description as needed.
+Description: |
+  The kernel package contains a variant of the ARM64 Linux kernel using 
+  a 16K page size.
+
+# As rpm complains about unpackaged files, we need to either delete or 
+# move Exclude_Files to a non shipped subpackage.
+Exclude_Files:
+
+# An option to include separate filter files if necessary
+Filter_Overide:
+
+# This will use Prasad's tool. While this particular variant does not
+# require overrides because it has a tree, if it did, they would look
+# like what we have here.
+Config_Overrides: |
+  CONFIG_ARM64_16K_PAGES=y
+  CONFIG_ARM64_4K_PAGES=n

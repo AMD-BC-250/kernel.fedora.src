@@ -202,20 +202,16 @@ Summary: The Linux kernel
 %define with_debug     %{?_without_debug:     0} %{?!_without_debug:     1}
 # kernel-zfcpdump (s390 specific kernel for zfcpdump)
 %define with_zfcpdump  %{?_without_zfcpdump:  0} %{?!_without_zfcpdump:  1}
-# kernel-16k (aarch64 kernel with 16K page_size)
-%define with_arm64_16k %{?_with_arm64_16k:    1} %{?!_with_arm64_16k:    0}
-# kernel-64k (aarch64 kernel with 64K page_size)
-%define with_arm64_64k %{?_without_arm64_64k: 0} %{?!_without_arm64_64k: 1}
 # kernel-rt (x86_64 and aarch64 only PREEMPT_RT enabled kernel)
 %define with_realtime  %{?_with_realtime:     1} %{?!_with_realtime:     0}
+%%WITHVARIANTS%%
 
 # Supported variants
 #            with_base with_debug    with_gcov
 # up         X         X             X
 # zfcpdump   X                       X
-# arm64_16k  X         X             X
-# arm64_64k  X         X             X
 # realtime   X         X             X
+%%VARIANTABLE%%
 
 # kernel-doc
 %define with_doc       %{?_without_doc:       0} %{?!_without_doc:       1}
@@ -303,7 +299,7 @@ Summary: The Linux kernel
 %define with_kernel_abi_stablelists 0
 # No realtime fedora variants
 %define with_realtime 0
-%define with_arm64_64k 0
+%%RHELONLYVARIANTSDISABLE%%
 %endif
 
 %if %{with_verbose}
@@ -406,6 +402,7 @@ Summary: The Linux kernel
 %define with_kernel_abi_stablelists 0
 %define with_selftests 0
 %define with_ipaclones 0
+%%ALLVARIANTSDISABLE%%
 %endif
 
 # if requested, only build realtime kernel
@@ -425,14 +422,15 @@ Summary: The Linux kernel
 %define with_headers 0
 %define with_efiuki 0
 %define with_zfcpdump 0
-%define with_arm64_16k 0
-%define with_arm64_64k 0
+%%ALLVARIANTSDISABLE%%
 %endif
 
 # RT kernel is only built on x86_64 and aarch64
 %ifnarch x86_64 aarch64
 %define with_realtime 0
 %endif
+
+%%ARCHVARIANTDISABLE%%
 
 # turn off kABI DUP check and DWARF-based check if kABI check is disabled
 %if !%{with_kabichk}
@@ -497,12 +495,6 @@ Summary: The Linux kernel
 # zfcpdump mechanism is s390 only
 %ifnarch s390x
 %define with_zfcpdump 0
-%endif
-
-# 16k and 64k variants only for aarch64
-%ifnarch aarch64
-%define with_arm64_16k 0
-%define with_arm64_64k 0
 %endif
 
 %if 0%{?fedora}
@@ -577,9 +569,8 @@ Summary: The Linux kernel
 %define with_up 0
 %define with_debug 0
 %define with_zfcpdump 0
-%define with_arm64_16k 0
-%define with_arm64_64k 0
 %define with_realtime 0
+%%ALLVARIANTSDISABLE%%
 
 %define with_debuginfo 0
 %define with_perf 0
@@ -628,16 +619,7 @@ Summary: The Linux kernel
 %else
 %define with_realtime_base 0
 %endif
-%if %{with_arm64_16k} && %{with_base}
-%define with_arm64_16k_base 1
-%else
-%define with_arm64_16k_base 0
-%endif
-%if %{with_arm64_64k} && %{with_base}
-%define with_arm64_64k_base 1
-%else
-%define with_arm64_64k_base 0
-%endif
+%%ALLVARIANTBASE%%
 
 #
 # Packages that need to be installed before the kernel is, because the %%post
@@ -902,9 +884,8 @@ Source33: %{name}-x86_64-debug-rhel.config
 Source34: def_variants.yaml.rhel
 
 Source41: x509.genkey.centos
-# ARM64 64K page-size kernel config
-Source42: %{name}-aarch64-64k-rhel.config
-Source43: %{name}-aarch64-64k-debug-rhel.config
+
+%%RHELVARIANTCONFIGS%%
 
 %endif
 
@@ -913,8 +894,6 @@ Source50: x509.genkey.fedora
 
 Source52: %{name}-aarch64-fedora.config
 Source53: %{name}-aarch64-debug-fedora.config
-Source54: %{name}-aarch64-16k-fedora.config
-Source55: %{name}-aarch64-16k-debug-fedora.config
 Source56: %{name}-ppc64le-fedora.config
 Source57: %{name}-ppc64le-debug-fedora.config
 Source58: %{name}-s390x-fedora.config
@@ -925,6 +904,9 @@ Source700: %{name}-riscv64-fedora.config
 Source701: %{name}-riscv64-debug-fedora.config
 
 Source62: def_variants.yaml.fedora
+
+%%FEDORAVARIANTCONFIGS%%
+
 %endif
 
 Source70: partial-kgcov-snip.config
@@ -1632,51 +1614,7 @@ zfcpdump infrastructure.
 # with_zfcpdump
 %endif
 
-%if %{with_arm64_16k_base}
-%define variant_summary The Linux kernel compiled for 16k pagesize usage
-%kernel_variant_package 16k
-%description 16k-core
-The kernel package contains a variant of the ARM64 Linux kernel using
-a 16K page size.
-%endif
-
-%if %{with_arm64_16k} && %{with_debug}
-%define variant_summary The Linux kernel compiled with extra debugging enabled
-%if !%{debugbuildsenabled}
-%kernel_variant_package -m 16k-debug
-%else
-%kernel_variant_package 16k-debug
-%endif
-%description 16k-debug-core
-The debug kernel package contains a variant of the ARM64 Linux kernel using
-a 16K page size.
-This variant of the kernel has numerous debugging options enabled.
-It should only be installed when trying to gather additional information
-on kernel bugs, as some of these options impact performance noticably.
-%endif
-
-%if %{with_arm64_64k_base}
-%define variant_summary The Linux kernel compiled for 64k pagesize usage
-%kernel_variant_package 64k
-%description 64k-core
-The kernel package contains a variant of the ARM64 Linux kernel using
-a 64K page size.
-%endif
-
-%if %{with_arm64_64k} && %{with_debug}
-%define variant_summary The Linux kernel compiled with extra debugging enabled
-%if !%{debugbuildsenabled}
-%kernel_variant_package -m 64k-debug
-%else
-%kernel_variant_package 64k-debug
-%endif
-%description 64k-debug-core
-The debug kernel package contains a variant of the ARM64 Linux kernel using
-a 64K page size.
-This variant of the kernel has numerous debugging options enabled.
-It should only be installed when trying to gather additional information
-on kernel bugs, as some of these options impact performance noticably.
-%endif
+%%VARIANTSUMMARY%%
 
 %if %{with_debug} && %{with_realtime}
 %define variant_summary The Linux PREEMPT_RT kernel compiled with extra debugging enabled
@@ -1745,37 +1683,7 @@ Prebuilt default unified kernel image for virtual machines.
 Prebuilt default unified kernel image addons for virtual machines.
 %endif
 
-%if %{with_arm64_16k} && %{with_debug} && %{with_efiuki}
-%description 16k-debug-uki-virt
-Prebuilt 16k debug unified kernel image for virtual machines.
-
-%description 16k-debug-uki-virt-addons
-Prebuilt 16k debug unified kernel image addons for virtual machines.
-%endif
-
-%if %{with_arm64_16k_base} && %{with_efiuki}
-%description 16k-uki-virt
-Prebuilt 16k unified kernel image for virtual machines.
-
-%description 16k-uki-virt-addons
-Prebuilt 16k unified kernel image addons for virtual machines.
-%endif
-
-%if %{with_arm64_64k} && %{with_debug} && %{with_efiuki}
-%description 64k-debug-uki-virt
-Prebuilt 64k debug unified kernel image for virtual machines.
-
-%description 64k-debug-uki-virt-addons
-Prebuilt 64k debug unified kernel image addons for virtual machines.
-%endif
-
-%if %{with_arm64_64k_base} && %{with_efiuki}
-%description 64k-uki-virt
-Prebuilt 64k unified kernel image for virtual machines.
-
-%description 64k-uki-virt-addons
-Prebuilt 64k unified kernel image addons for virtual machines.
-%endif
+%%VARIANTUKI%%
 
 %if %{with_ipaclones}
 %kernel_ipaclones_package
@@ -2932,14 +2840,6 @@ cd linux-%{KVERREL}
 BuildKernel %make_target %kernel_image %{_use_vdso} rt-debug
 %endif
 
-%if %{with_arm64_16k}
-BuildKernel %make_target %kernel_image %{_use_vdso} 16k-debug
-%endif
-
-%if %{with_arm64_64k}
-BuildKernel %make_target %kernel_image %{_use_vdso} 64k-debug
-%endif
-
 %if %{with_up}
 BuildKernel %make_target %kernel_image %{_use_vdso} debug
 %endif
@@ -2949,24 +2849,18 @@ BuildKernel %make_target %kernel_image %{_use_vdso} debug
 BuildKernel %make_target %kernel_image %{_use_vdso} zfcpdump
 %endif
 
-%if %{with_arm64_16k_base}
-BuildKernel %make_target %kernel_image %{_use_vdso} 16k
-%endif
-
-%if %{with_arm64_64k_base}
-BuildKernel %make_target %kernel_image %{_use_vdso} 64k
-%endif
-
 %if %{with_realtime_base}
 BuildKernel %make_target %kernel_image %{_use_vdso} rt
 %endif
+
+%%VARIANTBUILDKERNEL%%
 
 %if %{with_up_base}
 BuildKernel %make_target %kernel_image %{_use_vdso}
 %endif
 
 %ifnarch noarch i686 %{nobuildarches}
-%if !%{with_debug} && !%{with_zfcpdump} && !%{with_up} && !%{with_arm64_16k} && !%{with_arm64_64k} && !%{with_realtime}
+%if !%{with_debug} && !%{with_zfcpdump} && !%{with_up} && !%{with_realtime} %%VARIANTOFFTOOLS%%
 # If only building the user space tools, then initialize the build environment
 # and some variables so that the various userspace tools can be built.
 %{log_msg "Initialize userspace tools build environment"}
@@ -3708,46 +3602,6 @@ fi\
 %kernel_variant_post -v debug
 %endif
 
-%if %{with_arm64_16k_base}
-%kernel_variant_preun -v 16k
-%kernel_variant_post -v 16k
-%endif
-
-%if %{with_debug} && %{with_arm64_16k}
-%kernel_variant_preun -v 16k-debug
-%kernel_variant_post -v 16k-debug
-%endif
-
-%if %{with_arm64_16k} && %{with_debug} && %{with_efiuki}
-%kernel_variant_posttrans -v 16k-debug -u virt
-%kernel_variant_preun -v 16k-debug -u virt
-%endif
-
-%if %{with_arm64_16k_base} && %{with_efiuki}
-%kernel_variant_posttrans -v 16k -u virt
-%kernel_variant_preun -v 16k -u virt
-%endif
-
-%if %{with_arm64_64k_base}
-%kernel_variant_preun -v 64k
-%kernel_variant_post -v 64k
-%endif
-
-%if %{with_debug} && %{with_arm64_64k}
-%kernel_variant_preun -v 64k-debug
-%kernel_variant_post -v 64k-debug
-%endif
-
-%if %{with_arm64_64k} && %{with_debug} && %{with_efiuki}
-%kernel_variant_posttrans -v 64k-debug -u virt
-%kernel_variant_preun -v 64k-debug -u virt
-%endif
-
-%if %{with_arm64_64k_base} && %{with_efiuki}
-%kernel_variant_posttrans -v 64k -u virt
-%kernel_variant_preun -v 64k -u virt
-%endif
-
 %if %{with_realtime_base}
 %kernel_variant_preun -v rt
 %kernel_variant_post -v rt -r kernel
@@ -3759,6 +3613,8 @@ fi\
 %kernel_variant_post -v rt-debug
 %kernel_kvm_post rt-debug
 %endif
+
+%%VARIANTSCRIPTS%%
 
 ###
 ### file lists
@@ -4080,12 +3936,6 @@ fi\
 %if %{with_up}
 %kernel_variant_files %{_use_vdso} %{with_debug} debug
 %endif
-%if %{with_arm64_16k}
-%kernel_variant_files %{_use_vdso} %{with_debug} 16k-debug
-%endif
-%if %{with_arm64_64k}
-%kernel_variant_files %{_use_vdso} %{with_debug} 64k-debug
-%endif
 %kernel_variant_files %{_use_vdso} %{with_realtime_base} rt
 %if %{with_realtime}
 %kernel_variant_files %{_use_vdso} %{with_debug} rt-debug
@@ -4098,26 +3948,10 @@ fi\
 %files debug-modules
 %files debug-modules-core
 %files debug-modules-extra
-%if %{with_arm64_16k}
-%files 16k-debug
-%files 16k-debug-core
-%files 16k-debug-devel
-%files 16k-debug-devel-matched
-%files 16k-debug-modules
-%files 16k-debug-modules-extra
-%endif
-%if %{with_arm64_64k}
-%files 64k-debug
-%files 64k-debug-core
-%files 64k-debug-devel
-%files 64k-debug-devel-matched
-%files 64k-debug-modules
-%files 64k-debug-modules-extra
-%endif
 %endif
 %kernel_variant_files %{_use_vdso} %{with_zfcpdump} zfcpdump
-%kernel_variant_files %{_use_vdso} %{with_arm64_16k_base} 16k
-%kernel_variant_files %{_use_vdso} %{with_arm64_64k_base} 64k
+
+%%KERNELVARIANTFILES%%
 
 %define kernel_variant_ipaclones(k:) \
 %if %{1}\

@@ -111,3 +111,5 @@ else
 	# compatibility is necessary.
 	touch "${SOURCES}/patch-${SPECKVERSION}.${SPECKPATCHLEVEL}"-redhat.patch
 fi
+# Define the variants now:
+"${0%/*}"/genvariants.py "$SOURCES/$SPECFILE"
