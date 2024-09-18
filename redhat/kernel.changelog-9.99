@@ -1,3 +1,7 @@
+* Wed Sep 18 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.12.0-0.rc0.4a39ac5b7d62.6]
+- powerpc: temporary assembler fix (Patrick Talbert)
+Resolves: 
+
 * Wed Sep 18 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.12.0-0.rc0.4a39ac5b7d62.5]
 - Add CONFIG_SND_SOC_RT1320_SDW to pending-rhel for mismatch (Justin M. Forbes)
 - Turn on CONFIG_SND_SOC_RT1320_SDW in pending rhel (Justin M. Forbes)
