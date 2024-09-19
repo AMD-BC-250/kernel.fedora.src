@@ -1,3 +1,8 @@
+* Thu Sep 19 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.12.0-0.rc0.839c4f596f89.7]
+- kernel.spec.template: add CC0-1.0 to License field (Patrick Talbert)
+- powerpc: temporary assembler fix (Patrick Talbert)
+Resolves: 
+
 * Thu Sep 19 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.12.0-0.rc0.839c4f596f89.6]
 - Linux v6.12.0-0.rc0.839c4f596f89
 Resolves: 
