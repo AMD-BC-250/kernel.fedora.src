@@ -679,8 +679,8 @@ static int sets_patch(struct object *obj)
 
 	next = rb_first(&obj->sets);
 	while (next) {
-		struct btf_id_set8 *set8;
-		struct btf_id_set *set;
+		struct btf_id_set8 *set8 = NULL;
+		struct btf_id_set *set = NULL;
 		unsigned long addr, off;
 		struct btf_id *id;
 
@@ -727,7 +727,8 @@ static int sets_patch(struct object *obj)
 		}
 
 		pr_debug("sorting  addr %5lu: cnt %6d [%s]\n",
-			 off, id->is_set ? set->cnt : set8->cnt, id->name);
+			 off, set ? set->cnt : (set8 ? set8->cnt : 0),
+			 id->name);
 
 		next = rb_next(next);
 	}
