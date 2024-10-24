@@ -230,6 +230,8 @@ Summary: The Linux kernel
 %define with_tools     %{?_without_tools:     0} %{?!_without_tools:     1}
 # bpf tool
 %define with_bpftool   %{?_without_bpftool:   0} %{?!_without_bpftool:   1}
+# ynl
+%define with_ynl      %{?_without_ynl:      0} %{?!_without_ynl:      1}
 # kernel-debuginfo
 %define with_debuginfo %{?_without_debuginfo: 0} %{?!_without_debuginfo: 1}
 # kernel-abi-stablelists
@@ -387,6 +389,7 @@ Summary: The Linux kernel
 %define with_vdso_install 0
 %define with_perf 0
 %define with_libperf 0
+%define with_ynl 0
 %define with_tools 0
 %define with_bpftool 0
 %define with_kernel_abi_stablelists 0
@@ -400,6 +403,7 @@ Summary: The Linux kernel
 %define with_vdso_install 0
 %define with_perf 0
 %define with_libperf 0
+%define with_ynl 0
 %define with_tools 0
 %define with_bpftool 0
 %define with_kernel_abi_stablelists 0
@@ -416,6 +420,7 @@ Summary: The Linux kernel
 %define with_vdso_install 0
 %define with_perf 0
 %define with_libperf 0
+%define with_ynl 0
 %define with_tools 0
 %define with_bpftool 0
 %define with_kernel_abi_stablelists 0
@@ -483,6 +488,7 @@ Summary: The Linux kernel
 %define with_tools 0
 %define with_perf 0
 %define with_libperf 0
+%define with_ynl 0
 %define with_bpftool 0
 %define with_selftests 0
 %define with_debug 0
@@ -583,6 +589,7 @@ Summary: The Linux kernel
 %define with_debuginfo 0
 %define with_perf 0
 %define with_libperf 0
+%define with_ynl 0
 %define with_tools 0
 %define with_bpftool 0
 %define with_selftests 0
@@ -707,6 +714,9 @@ BuildRequires: numactl-devel
 %ifarch aarch64
 BuildRequires: opencsd-devel >= 1.0.0
 %endif
+%endif
+%if %{with_ynl}
+BuildRequires: python3-pyyaml python3-jsonschema
 %endif
 %if %{with_tools}
 BuildRequires: python3-docutils
@@ -1192,6 +1202,15 @@ This package provides debug information for the libperf package.
 # of matching the pattern against the symlinks file.
 %{expand:%%global _find_debuginfo_opts %{?_find_debuginfo_opts} -p '.*%%{_libdir}/libperf.so.*(\.debug)?|XXX' -o libperf-debuginfo.list}
 # with_libperf
+%endif
+
+%if %{with_ynl}
+%package -n ynl
+Summary: ynl - client and tools for Netlink protocol specifications in YAML
+Requires: python3
+%description -n ynl
+This package contains the ynl cli tool, libraries and docs
+for Netlink protocol specifications in YAML.
 %endif
 
 %if %{with_tools}
@@ -2986,6 +3005,40 @@ fi
 %endif
 %endif
 
+# ynl
+%if %{with_ynl}
+pushd tools/net/ynl
+
+install -d %{buildroot}%{_libexecdir}/ynl
+for f in $(find . -name \*.py); do
+	install -m 0755 -D $f "%{buildroot}%{_libexecdir}/ynl/$f"
+done
+install -d %{buildroot}%{_bindir}
+ln -s %{_libexecdir}/ynl/cli.py %{buildroot}%{_bindir}/ynl-cli
+ln -s %{_libexecdir}/ynl/ynl-gen-c.py %{buildroot}%{_bindir}/ynl-gen-c
+ln -s %{_libexecdir}/ynl/ynl-gen-rst.py %{buildroot}%{_bindir}/ynl-gen-rst
+ln -s %{_libexecdir}/ynl/ethtool.py %{buildroot}%{_bindir}/ynl-ethtool
+
+make V=1
+install -d %{buildroot}%{_libdir}
+install -m 0644 libynl.a %{buildroot}%{_libdir}/libynl.a
+
+install -d %{buildroot}%{_datadir}/ynl
+install -d %{buildroot}%{_datadir}/ynl/specs
+install -d %{buildroot}%{_docdir}/ynl
+for f in ../../../Documentation/netlink/*.yaml; do
+	out="$(basename $f)"
+	install -m 0644 "$f" "%{buildroot}%{_datadir}/ynl/$out"
+done
+for spec in ../../../Documentation/netlink/specs/*.yaml; do
+	out="$(basename $spec)"
+	install -m 0644 "$spec" "%{buildroot}%{_datadir}/ynl/specs/$out"
+	./ynl-gen-rst.py -o "%{buildroot}%{_docdir}/ynl/${out%.*}.rst" -i "$spec"
+done
+popd
+%endif
+
+
 %ifarch aarch64
 %global perf_build_extra_opts CORESIGHT=1
 %endif
@@ -3862,6 +3915,15 @@ fi\
 # with_libperf
 %endif
 
+# with_ynl
+%if %{with_ynl}
+%files -n ynl
+%{_bindir}/ynl*
+%{_libdir}/libynl*
+%{_libexecdir}/ynl
+%{_docdir}/ynl
+%{_datadir}/ynl
+%endif
 
 %if %{with_tools}
 %ifnarch %{cpupowerarchs}
