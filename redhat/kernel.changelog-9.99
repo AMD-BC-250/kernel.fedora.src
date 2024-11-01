@@ -1,3 +1,8 @@
+* Fri Nov 01 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.12.0-0.rc5.6c52d4da1c74.48]
+- tools/rtla: fix collision with glibc sched_attr/sched_set_attr (Jan Stancek)
+- tools/rtla: drop __NR_sched_getattr (Jan Stancek)
+Resolves: 
+
 * Fri Nov 01 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.12.0-0.rc5.6c52d4da1c74.47]
 - redhat: configs: Drop CONFIG_MEMSTICK_REALTEK_PCI config option (Desnes Nunes)
 - Linux v6.12.0-0.rc5.6c52d4da1c74
