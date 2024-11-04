@@ -1,3 +1,8 @@
+* Mon Nov 04 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.12.0-0.rc6.51]
+- tools/rtla: fix collision with glibc sched_attr/sched_set_attr (Jan Stancek)
+- tools/rtla: drop __NR_sched_getattr (Jan Stancek)
+Resolves: 
+
 * Mon Nov 04 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.12.0-0.rc6.50]
 - redhat/configs: add bootconfig to kernel-tools package (Brian Masney)
 - Enable CONFIG_SECURITY_LANDLOCK for RHEL (Zbigniew Jędrzejewski-Szmek) [RHEL-8810]
