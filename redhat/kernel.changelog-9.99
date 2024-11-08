@@ -1,3 +1,8 @@
+* Fri Nov 08 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.12.0-0.rc6.906bd684e4b1.55]
+- tools/rtla: fix collision with glibc sched_attr/sched_set_attr (Jan Stancek)
+- tools/rtla: drop __NR_sched_getattr (Jan Stancek)
+Resolves: 
+
 * Fri Nov 08 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.12.0-0.rc6.906bd684e4b1.54]
 - Linux v6.12.0-0.rc6.906bd684e4b1
 Resolves: 
