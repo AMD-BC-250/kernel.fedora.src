@@ -28,7 +28,8 @@ void rh_print_flags(void);
 	unlikely(__ret_mark_once);					\
 })
 #else
-static void rh_print_flags(void) { }
-static void rh_add_flag(const char *flag_name) { }
+static void __maybe_unused rh_print_flags(void) { }
+static void __maybe_unused rh_add_flag(const char *flag_name) { }
 #endif
-#endif
+
+#endif /* _LINUX_RH_FLAGS_H */
