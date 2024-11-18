@@ -55,6 +55,10 @@ do
 			# RHGITURL may change depending on the user's method of cloning
 			# RHDISTDATADIR will change based on these tests
 			# VARS is a list of variables added for the 'dist-dump-variables' target
+			# ARCHCONFIG changes depending on the architecture of the system running the tests
+			# CURARCH changes depending on the architecture of the system running the tests
+			# KABI_CROSS_COMPILE changes depending on the architecture of the system running the tests
+			# MACH changes depending on the architecture of the system running the tests
 			# and can be ignored.
 			make RHSELFTESTDATA=1 DIST="${DIST}" DISTRO="${DISTRO}" HEAD=${commit} dist-dump-variables | grep "=" |\
 				grep -v -w CURDIR |\
@@ -65,6 +69,10 @@ do
 				grep -v -w RHGITURL |\
 				grep -v -w RHDISTDATADIR |\
 				grep -v -w VARS |\
+				grep -v -w ARCHCONFIG |\
+				grep -v -w CURARCH |\
+				grep -v -w KABI_CROSS_COMPILE |\
+				grep -v -w MACH |\
 				sort -u >& "${destdir}/${varfilename}" && \
 				sed -i 's/ \S*\(rhpkg.mk\)\S*//g' "${destdir}/${varfilename}" &
 
