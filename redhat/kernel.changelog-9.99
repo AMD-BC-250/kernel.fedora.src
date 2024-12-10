@@ -1,3 +1,8 @@
+* Tue Dec 10 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.13.0-0.rc2.7cb1b4663150.23]
+- x86/insn_decoder_test: allow longer symbol-names (David Rheinsberg)
+- kernel.spec: update license field (Scott Weaver)
+Resolves: 
+
 * Tue Dec 10 2024 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.13.0-0.rc2.7cb1b4663150.22]
 - gitlab-ci: disable clang CI pipelines (Scott Weaver)
 - redhat/configs: Remove obsolete arch64/64k/CONFIG_FORCE_MAX_ZONEORDER (Waiman Long)
