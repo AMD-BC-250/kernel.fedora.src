@@ -1,3 +1,9 @@
+* Sun Jan 19 2025 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.13.0-0.rc7.fda5e3f28400.61]
+- Fix build with merged-sbin (Adam Williamson)
+- x86/insn_decoder_test: allow longer symbol-names (David Rheinsberg)
+- kernel.spec: update license field (Scott Weaver)
+Resolves: 
+
 * Sun Jan 19 2025 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.13.0-0.rc7.fda5e3f28400.60]
 - Linux v6.13.0-0.rc7.fda5e3f28400
 Resolves: 
