@@ -1,3 +1,10 @@
+* Tue Jan 21 2025 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.14.0-0.rc0.95ec54a420b8.63]
+- include/linux: Adjust headers for C23 (Jakub Jelinek)
+- redhat: kernel.spec: fix build with merged-sbin (Adam Williamson)
+- x86/insn_decoder_test: allow longer symbol-names (David Rheinsberg)
+- kernel.spec: update license field (Scott Weaver)
+Resolves: 
+
 * Tue Jan 21 2025 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.14.0-0.rc0.95ec54a420b8.62]
 - Turn off CONFIG_ARM_TIMER_SP804 for automotive (Justin M. Forbes)
 - Set ARM_TIMER_SP804 (Justin M. Forbes)
