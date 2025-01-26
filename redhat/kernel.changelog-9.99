@@ -1,3 +1,16 @@
+* Sun Jan 26 2025 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.14.0-0.rc0.aa22f4da2a46.6]
+- drop %%{_datadir}/perf-core/* from kernel.spec (Thorsten Leemhuis)
+- put new misc_minor_kunit in modules-internal (Thorsten Leemhuis)
+- put new cirrus kunit tests in modules-internal (Thorsten Leemhuis)
+- apply -Wno-error=unterminated-string-initialization temporarily (Thorsten Leemhuis)
+- x86/boot: Use '-std=gnu11' to fix build with GCC 15 (Nathan Chancellor)
+- kbuild: Use -fzero-init-padding-bits=all (Kees Cook)
+- include/linux: Adjust headers for C23 (Jakub Jelinek)
+- redhat: kernel.spec: fix build with merged-sbin (Zbigniew Jędrzejewski-Szmek)
+- x86/insn_decoder_test: allow longer symbol-names (David Rheinsberg)
+- kernel.spec: update license field (Scott Weaver)
+Resolves: 
+
 * Sun Jan 26 2025 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.14.0-0.rc0.aa22f4da2a46.5]
 - Fix up CONFIG_REGMAP mismatch (Scott Weaver)
 - Linux v6.14.0-0.rc0.aa22f4da2a46
