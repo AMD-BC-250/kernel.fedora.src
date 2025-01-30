@@ -1,3 +1,14 @@
+* Thu Jan 30 2025 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.14.0-0.rc0.72deda0abee6.11]
+- s390/bitops: Use correct constraint for arch_test_bit() inline assembly (Heiko Carstens)
+- Add -fzero-init-padding-bits to bindgen_skip_cflags (Justin M. Forbes)
+- s390: Add '-std=gnu11' to decompressor and purgatory CFLAGS (Nathan Chancellor)
+- apply -Wno-error=unterminated-string-initialization temporarily (Thorsten Leemhuis)
+- x86/boot: Use '-std=gnu11' to fix build with GCC 15 (Nathan Chancellor)
+- kbuild: Use -fzero-init-padding-bits=all (Kees Cook)
+- include/linux: Adjust headers for C23 (Jakub Jelinek)
+- x86/insn_decoder_test: allow longer symbol-names (David Rheinsberg)
+Resolves: 
+
 * Thu Jan 30 2025 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.14.0-0.rc0.72deda0abee6.10]
 - redhat/configs: disable CONFIG_AF_UNIX_OOB on RHEL (Marcelo Ricardo Leitner)
 - redhat/configs: automotive: Disable wireless network and it's dependencies (Dorinda Bassey)
