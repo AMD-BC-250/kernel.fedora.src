@@ -1,3 +1,12 @@
+* Fri Jan 31 2025 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.14.0-0.rc0.69e858e0b8b2.12]
+- Add -fzero-init-padding-bits to bindgen_skip_cflags (Justin M. Forbes)
+- apply -Wno-error=unterminated-string-initialization temporarily (Thorsten Leemhuis)
+- x86/boot: Use '-std=gnu11' to fix build with GCC 15 (Nathan Chancellor)
+- kbuild: Use -fzero-init-padding-bits=all (Kees Cook)
+- include/linux: Adjust headers for C23 (Jakub Jelinek)
+- x86/insn_decoder_test: allow longer symbol-names (David Rheinsberg)
+Resolves: 
+
 * Fri Jan 31 2025 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.14.0-0.rc0.69e858e0b8b2.11]
 - Turn on CONFIG_DRM_ACCEL_AMDXDNA for Fedora (Justin M. Forbes)
 - Linux v6.14.0-0.rc0.69e858e0b8b2
