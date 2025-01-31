@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/bash
 
 # Adjusts the configuration options to build the variants correctly
 
@@ -22,9 +22,9 @@ fi
 # The +1 is to remove the - at the end of the SPECPACKAGE_NAME string
 specpackage_name_len=$((${#SPECPACKAGE_NAME} + 1))
 for i in "${SPECPACKAGE_NAME}"*-"$FLAVOR".config; do
-	# shellcheck disable=SC3057
-	NEW=${SPECPACKAGE_NAME}-"$SPECRPMVERSION"-$(echo "${i:$specpackage_name_len}" | sed s/-"$FLAVOR"//)
-	mv "$i" "$NEW"
+	variant=${i:$specpackage_name_len}
+	variant=${variant/-$FLAVOR}
+	mv "$i" "$SPECPACKAGE_NAME-$SPECRPMVERSION-$variant"
 done
 
 rm -f kernel-*-"$SECONDARY".config
