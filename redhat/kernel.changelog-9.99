@@ -1,3 +1,9 @@
+* Tue Feb 18 2025 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.14.0-0.rc3.2408a807bfc3.30]
+- apply -Wno-error=unterminated-string-initialization temporarily (Thorsten Leemhuis)
+- include/linux: Adjust headers for C23 (Jakub Jelinek)
+- x86/insn_decoder_test: allow longer symbol-names (David Rheinsberg)
+Resolves: 
+
 * Tue Feb 18 2025 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.14.0-0.rc3.2408a807bfc3.29]
 - fedora: pending: drop USB_ONBOARD_DEV_USB5744 (Peter Robinson)
 - Linux v6.14.0-0.rc3.2408a807bfc3
