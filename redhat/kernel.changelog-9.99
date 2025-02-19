@@ -1,3 +1,9 @@
+* Wed Feb 19 2025 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.14.0-0.rc3.6537cfb395f3.31]
+- apply -Wno-error=unterminated-string-initialization temporarily (Thorsten Leemhuis)
+- include/linux: Adjust headers for C23 (Jakub Jelinek)
+- x86/insn_decoder_test: allow longer symbol-names (David Rheinsberg)
+Resolves: 
+
 * Wed Feb 19 2025 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.14.0-0.rc3.6537cfb395f3.30]
 - redhat/configs: automotive: disable VFIO_PLATFORM (Eric Chanudet)
 - Revert "Merge: redhat/configs: automotive: Disable SYSIPC config" (Dorinda Bassey)
