@@ -1,3 +1,9 @@
+* Sat Feb 22 2025 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.14.0-0.rc3.ff202c5028a1.34]
+- apply -Wno-error=unterminated-string-initialization temporarily (Thorsten Leemhuis)
+- include/linux: Adjust headers for C23 (Jakub Jelinek)
+- x86/insn_decoder_test: allow longer symbol-names (David Rheinsberg)
+Resolves: 
+
 * Sat Feb 22 2025 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.14.0-0.rc3.ff202c5028a1.33]
 - Linux v6.14.0-0.rc3.ff202c5028a1
 Resolves: 
