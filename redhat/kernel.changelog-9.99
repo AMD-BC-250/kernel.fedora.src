@@ -1,3 +1,9 @@
+* Mon Feb 24 2025 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.14.0-0.rc4.36]
+- apply -Wno-error=unterminated-string-initialization temporarily (Thorsten Leemhuis)
+- include/linux: Adjust headers for C23 (Jakub Jelinek)
+- x86/insn_decoder_test: allow longer symbol-names (David Rheinsberg)
+Resolves: 
+
 * Mon Feb 24 2025 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.14.0-0.rc4.35]
 - redhat/configs: Enable Mediatek Bluetooth USB drivers (Bastien Nocera)
 - redhat/configs: Disable CONFIG_PKEY for zfcpdump configs (Mete Durlu) [RHEL-78341]
