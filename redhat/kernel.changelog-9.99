@@ -1,3 +1,9 @@
+* Tue Feb 25 2025 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.14.0-0.rc4.37]
+- apply -Wno-error=unterminated-string-initialization temporarily (Thorsten Leemhuis)
+- include/linux: Adjust headers for C23 (Jakub Jelinek)
+- x86/insn_decoder_test: allow longer symbol-names (David Rheinsberg)
+Resolves: 
+
 * Tue Feb 25 2025 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.14.0-0.rc4.36]
 - Revert "Merge: redhat/configs: automotive: Disable POSIX_MQUEUE config (Dorinda Bassey)
 - redhat/configs: enable in kernel compression/decompression of compressed modules (Herton R. Krzesinski)
