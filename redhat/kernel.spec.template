@@ -437,7 +437,7 @@ Summary: The Linux kernel
 %define with_realtime 0
 %define with_up 0
 %define with_debug 0
-%define with_debuginfo 0
+%define with_debuginfo 1
 %define with_vdso_install 0
 %define with_selftests 1
 %endif
@@ -492,6 +492,11 @@ Summary: The Linux kernel
 %endif
 
 # Overrides for generic default options
+
+# Selftests require debuginfo
+%if !%{with_debuginfo}
+%define with_selftests 0
+%endif
 
 # only package docs noarch
 %ifnarch noarch
