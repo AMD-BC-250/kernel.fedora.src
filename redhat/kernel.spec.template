@@ -764,6 +764,9 @@ BuildRequires: libnl3-devel
 %endif
 %endif
 
+%if 0%{?rhel} && 0%{?rhel} < 10
+%define with_ynl 0
+%endif
 %if %{with_tools} && %{with_ynl}
 BuildRequires: python3-pyyaml python3-jsonschema python3-pip python3-setuptools >= 61
 %endif
