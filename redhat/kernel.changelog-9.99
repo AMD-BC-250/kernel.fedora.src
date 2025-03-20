@@ -1,3 +1,10 @@
+* Thu Mar 20 2025 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.14.0-0.rc7.a7f2e10ecd8f.59]
+- mei: vsc: Fix fortify-panic caused by invalid counted_by() use (Hans de Goede)
+- apply -Wno-error=unterminated-string-initialization temporarily (Thorsten Leemhuis)
+- include/linux: Adjust headers for C23 (Jakub Jelinek)
+- x86/insn_decoder_test: allow longer symbol-names (David Rheinsberg)
+Resolves: 
+
 * Thu Mar 20 2025 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.14.0-0.rc7.a7f2e10ecd8f.58]
 - Linux v6.14.0-0.rc7.a7f2e10ecd8f
 Resolves: 
