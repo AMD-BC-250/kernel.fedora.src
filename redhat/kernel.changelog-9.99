@@ -1,3 +1,7 @@
+* Thu Mar 20 2025 Nikhil Dikshit <ndikshit@ciq.com> [6.12.15-0.test.el9]
+- Enable Rocky Linux kernel packaging (Nikhil Dikshit)
+Resolves: 
+
 * Tue Feb 18 2025 Augusto Caringi <acaringi@redhat.com> [6.12.15-0]
 - Linux v6.12.15
 Resolves: 
