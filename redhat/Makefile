@@ -716,6 +716,7 @@ sources-rh: $(TARBALL) $(KABI_TARBALL) $(KABIDW_TARBALL) generate-testpatch-tmp 
 		scripts/mod/mod-sign.sh \
 		scripts/uki_addons/uki_create_addons.py \
 		scripts/uki_addons/uki_addons.json \
+		scripts/pe-add-sbat.py \
 		configs/flavors \
 		configs/generate_all_configs.sh \
 		configs/merge.py \

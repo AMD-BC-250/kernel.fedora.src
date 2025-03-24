@@ -990,6 +990,7 @@ Source87: flavors
 
 Source151: uki_create_addons.py
 Source152: uki_addons.json
+Source153: pe-add-sbat.py
 
 Source100: rheldup3.x509
 Source101: rhelkpatch1.x509
@@ -2282,6 +2283,15 @@ BuildKernel() {
       cp arch/$Arch/boot/zImage.stub $RPM_BUILD_ROOT/lib/modules/$KernelVer/zImage.stub-$KernelVer || :
     fi
 
+%ifarch x86_64 aarch64
+    # Add SBAT (https://github.com/rhboot/shim/blob/main/SBAT.md) information
+    python3 %{SOURCE153} $KernelImage <<- EOF
+sbat,1,SBAT Version,sbat,1,https://github.com/rhboot/shim/blob/main/SBAT.md
+linux,1,Red Hat,linux,$KernelVer,mailto:secalert@redhat.com
+linux.%{sbat_suffix},1,Red Hat,linux,$KernelVer,mailto:secalert@redhat.com
+EOF
+%endif
+
     %if %{signkernel}
     %{log_msg "Copy kernel for signing"}
     if [ "$KernelImage" = vmlinux ]; then
@@ -2696,8 +2706,6 @@ BuildKernel() {
         SBATsuffix="rhel"
 %endif
         SBAT=$(cat <<- EOF
-	linux,1,Red Hat,linux,$KernelVer,mailto:secalert@redhat.com
-	linux.$SBATsuffix,1,Red Hat,linux,$KernelVer,mailto:secalert@redhat.com
 	kernel-uki-virt.$SBATsuffix,1,Red Hat,kernel-uki-virt,$KernelVer,mailto:secalert@redhat.com
 	EOF
 	)
