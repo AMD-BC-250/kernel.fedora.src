@@ -437,7 +437,7 @@ Summary: The Linux kernel
 %define with_realtime 0
 %define with_up 0
 %define with_debug 0
-%define with_debuginfo 0
+%define with_debuginfo 1
 %define with_vdso_install 0
 %define with_selftests 1
 %endif
@@ -492,6 +492,11 @@ Summary: The Linux kernel
 %endif
 
 # Overrides for generic default options
+
+# Selftests require debuginfo
+%if !%{with_debuginfo}
+%define with_selftests 0
+%endif
 
 # only package docs noarch
 %ifnarch noarch
@@ -3148,8 +3153,8 @@ pushd tools/tracing/rtla
 popd
 %endif
 
-if [ -f $DevelDir/vmlinux.h ]; then
-  RPM_VMLINUX_H=$DevelDir/vmlinux.h
+if [ -f $RPM_BUILD_ROOT$DevelDir/vmlinux.h ]; then
+  RPM_VMLINUX_H=$RPM_BUILD_ROOT$DevelDir/vmlinux.h
 fi
 echo "${RPM_VMLINUX_H}" > ../vmlinux_h_path
 
@@ -3170,7 +3175,7 @@ if [ ! -f include/generated/autoconf.h ]; then
 fi
 
 %{log_msg "build samples/bpf"}
-%{make} %{?_smp_mflags} ARCH=$Arch V=1 M=samples/bpf/ VMLINUX_H="${RPM_VMLINUX_H}" || true
+%{make} %{?_smp_mflags} EXTRA_CXXFLAGS="${RPM_OPT_FLAGS}" TPROGS_USER_CFLAGS="${RPM_OPT_FLAGS}" TPROGS_USER_LDFLAGS="%{__global_ldflags}" BPFTOOL=$(pwd)/tools/bpf/bpftool/bootstrap/bpftool ARCH=$Arch V=1 M=samples/bpf/ VMLINUX_H="${RPM_VMLINUX_H}" || true
 
 pushd tools/testing/selftests
 # We need to install here because we need to call make with ARCH set which
@@ -3182,7 +3187,7 @@ pushd tools/testing/selftests
 %endif
 
 %{log_msg "main selftests compile"}
-%{make} %{?_smp_mflags} ARCH=$Arch V=1 TARGETS="bpf cgroup mm net net/forwarding net/mptcp net/netfilter tc-testing memfd drivers/net/bonding iommu cachestat" SKIP_TARGETS="" $force_targets INSTALL_PATH=%{buildroot}%{_libexecdir}/kselftests VMLINUX_H="${RPM_VMLINUX_H}" install
+%{make} %{?_smp_mflags} EXTRA_CXXFLAGS="${RPM_OPT_FLAGS}" ARCH=$Arch V=1 TARGETS="bpf cgroup mm net net/forwarding net/mptcp net/netfilter tc-testing memfd drivers/net/bonding iommu cachestat" SKIP_TARGETS="" $force_targets INSTALL_PATH=%{buildroot}%{_libexecdir}/kselftests VMLINUX_H="${RPM_VMLINUX_H}" install
 
 %ifarch %{klptestarches}
 	# kernel livepatching selftest test_modules will build against
