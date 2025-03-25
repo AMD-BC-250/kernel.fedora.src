@@ -1,3 +1,8 @@
+* Tue Mar 25 2025 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.15.0-0.rc0.2df0c02dab82.3]
+- apply -Wno-error=unterminated-string-initialization temporarily (Thorsten Leemhuis)
+- x86/insn_decoder_test: allow longer symbol-names (David Rheinsberg)
+Resolves: 
+
 * Tue Mar 25 2025 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.15.0-0.rc0.2df0c02dab82.2]
 - Reset RHEL_RELEASE for 6.15 cycle (Justin M. Forbes)
 - arm64: cleanup and de-dupe erratum (Peter Robinson)
