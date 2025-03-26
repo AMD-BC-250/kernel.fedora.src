@@ -1,3 +1,8 @@
+* Wed Mar 26 2025 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.15.0-0.rc0.f6e0150b2003.4]
+- apply -Wno-error=unterminated-string-initialization temporarily (Thorsten Leemhuis)
+- x86/insn_decoder_test: allow longer symbol-names (David Rheinsberg)
+Resolves: 
+
 * Wed Mar 26 2025 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.15.0-0.rc0.f6e0150b2003.3]
 - Fix up mismatches in the 6.15 merge window (Scott Weaver)
 - Reset log for 6.15 cycle (Justin M. Forbes)
