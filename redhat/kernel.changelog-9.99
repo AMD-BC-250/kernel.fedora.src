@@ -1,3 +1,10 @@
+* Thu Mar 27 2025 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.15.0-0.rc0.1a9239bb4253.5]
+- kernel.spec: update license field (Scott Weaver)
+- kernel.spec.template: cpupower: adjust lib versioning (Thorsten Leemhuis)
+- apply -Wno-error=unterminated-string-initialization temporarily (Thorsten Leemhuis)
+- x86/insn_decoder_test: allow longer symbol-names (David Rheinsberg)
+Resolves: 
+
 * Thu Mar 27 2025 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.15.0-0.rc0.1a9239bb4253.4]
 - Linux v6.15.0-0.rc0.1a9239bb4253
 Resolves: 
