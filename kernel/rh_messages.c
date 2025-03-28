@@ -13,6 +13,7 @@
  *
  * In general, deprecated and unmaintained drivers continue to receive security
  * related fixes until they are disabled.
+ * Adding a worthless comment here.
  */
 
 #include <linux/kernel.h>
