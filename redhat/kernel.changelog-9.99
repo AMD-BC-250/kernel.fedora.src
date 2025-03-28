@@ -1,3 +1,7 @@
+* Fri Mar 28 2025 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.15.0-0.rc0.acb4f33713b9.6]
+- apply -Wno-error=unterminated-string-initialization temporarily (Thorsten Leemhuis)
+Resolves: 
+
 * Fri Mar 28 2025 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.15.0-0.rc0.acb4f33713b9.5]
 - kernel.spec.template: cpupower: adjust lib versioning (Thorsten Leemhuis)
 - redhat/configs: automotive: builtin virtio-mmio (Eric Chanudet)
