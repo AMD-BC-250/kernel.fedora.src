@@ -1,3 +1,7 @@
+* Wed Apr 02 2025 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.15.0-0.rc0.acc4d5ff0b61.9]
+- apply -Wno-error=unterminated-string-initialization temporarily (Thorsten Leemhuis)
+Resolves: 
+
 * Wed Apr 02 2025 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.15.0-0.rc0.acc4d5ff0b61.8]
 - Switch ZSWAP_ZPOOL_DEFAULT to ZSMALLOC as ZBUD has been removed (Justin M. Forbes)
 - Linux v6.15.0-0.rc0.acc4d5ff0b61
