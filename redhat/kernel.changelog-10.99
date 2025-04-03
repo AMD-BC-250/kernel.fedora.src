@@ -1,3 +1,7 @@
+* Thu Apr 03 2025 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.15.0-0.rc0.a2cc6ff5ec8f.10]
+- apply -Wno-error=unterminated-string-initialization temporarily (Thorsten Leemhuis)
+Resolves: 
+
 * Thu Apr 03 2025 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.15.0-0.rc0.a2cc6ff5ec8f.9]
 - redhat: bump RHEL_MAJOR (Jan Stancek)
 - redhat/configs: enable CONFIG_AMD_3D_VCACHE for x86 on RHEL (David Arcari)
