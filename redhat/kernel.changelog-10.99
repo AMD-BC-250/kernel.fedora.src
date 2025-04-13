@@ -1,3 +1,7 @@
+* Sun Apr 13 2025 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.15.0-0.rc1.7cdabafc0012.21]
+- apply -Wno-error=unterminated-string-initialization temporarily (Thorsten Leemhuis)
+Resolves: 
+
 * Sun Apr 13 2025 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.15.0-0.rc1.7cdabafc0012.20]
 - Linux v6.15.0-0.rc1.7cdabafc0012
 Resolves: 
