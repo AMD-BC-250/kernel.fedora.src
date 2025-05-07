@@ -1,1 +1,1 @@
-# CONFIG_QCOM_BAM_DMA is not set
+CONFIG_QCOM_BAM_DMA=y
