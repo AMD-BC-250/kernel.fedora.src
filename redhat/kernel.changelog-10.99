@@ -1,3 +1,7 @@
+* Wed May 07 2025 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.15.0-0.rc5.0d8d44db295c.45]
+- Shorten the uname for git snapshots (Justin M. Forbes)
+Resolves: 
+
 * Wed May 07 2025 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.15.0-0.rc5.0d8d44db295c.44]
 - Linux v6.15.0-0.rc5.0d8d44db295c
 Resolves: 
