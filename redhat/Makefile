@@ -578,8 +578,8 @@ dist-configs-check: dist-configs-prep
 	+cd $(REDHAT)/configs; ./process_configs.sh $(PROCESS_CONFIGS_CHECK_OPTS) "" ""
 
 dist-configs-prep: dist-clean-configs
-	+cd $(REDHAT)/configs; ./build_configs.sh "partial" "snip"
-	+cd $(REDHAT)/configs; ./build_configs.sh "$(SPECPACKAGE_NAME)" "$(FLAVOR)"
+	+cd $(REDHAT)/configs; ./build_configs.py "partial" "snip"
+	+cd $(REDHAT)/configs; ./build_configs.py "$(SPECPACKAGE_NAME)" "$(FLAVOR)"
 
 dist-configs-arch: ##configuration Same as dist-configs but for single architecture only.
 dist-configs-arch: ARCH_MACH = $(MACH)
