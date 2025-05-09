@@ -1,3 +1,7 @@
+* Fri May 09 2025 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.15.0-0.rc5.9c69f8884904.47]
+- Shorten the uname for git snapshots (Justin M. Forbes)
+Resolves: 
+
 * Fri May 09 2025 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.15.0-0.rc5.9c69f8884904.46]
 - Enable the gs_usb CAN bus driver in RHEL (Radu Rendec)
 - Stop disabling some modules needed to run on Azure (Pierre-Yves Chibon)
