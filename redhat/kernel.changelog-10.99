@@ -1,3 +1,8 @@
+* Thu May 15 2025 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.15.0-0.rc6.088d13246a46.54]
+- Revert "kbuild: Require pahole <v1.28 or >v1.29 with GENDWARFKSYMS on X86" (Justin M. Forbes)
+- Revert CONFIG_GENKSYMS for x86 (Justin M. Forbes)
+Resolves: 
+
 * Thu May 15 2025 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.15.0-0.rc6.088d13246a46.53]
 - Flip GENKSYMS for RHEL (Justin M. Forbes)
 - Linux v6.15.0-0.rc6.088d13246a46
