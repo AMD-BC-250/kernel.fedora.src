@@ -574,6 +574,17 @@ dist-rhel-configs: FLAVOR = rhel
 dist-rhel-configs: dist-configs
 rh-configs: dist-rhel-configs
 
+# although automotive is not a flavor we want to treat it like it has it's own config priority file
+automotive-configs-pre:
+	@cp $(REDHAT)/configs/priority.$(FLAVOR) $(REDHAT)/configs/priority.$(FLAVOR).bak
+	@sed -i '/^#\|^ORDER\|^\(x86_64\|aarch64\)-automotive/!d' $(REDHAT)/configs/priority.$(FLAVOR)
+automotive-configs-post:
+	@mv $(REDHAT)/configs/priority.$(FLAVOR).bak $(REDHAT)/configs/priority.$(FLAVOR)
+
+dist-automotive-configs: ##build build only the automotive configs
+dist-automotive-configs: FLAVOR = rhel
+dist-automotive-configs: automotive-configs-pre .WAIT dist-configs .WAIT automotive-configs-post
+
 dist-configs-check: dist-configs-prep
 	+cd $(REDHAT)/configs; ./process_configs.sh $(PROCESS_CONFIGS_CHECK_OPTS) "" ""
 
@@ -767,7 +778,8 @@ dist-srpm-automotive: INCLUDE_FEDORA_FILES := 0
 dist-srpm-automotive: INCLUDE_RHEL_FILES := 0
 dist-srpm-automotive: INCLUDE_RT_FILES := 0
 dist-srpm-automotive: INCLUDE_AUTOMOTIVE_FILES := 1
-dist-srpm-automotive: dist-srpm
+dist-srpm-automotive: FLAVOR := rhel
+dist-srpm-automotive: automotive-configs-pre .WAIT dist-srpm .WAIT automotive-configs-post
 	@rm -f $(REDHAT)/kernel-automotive*
 
 dist-rpms: ##build Create the binary RPMS for the kernel. See the dist-brew target for available options.
