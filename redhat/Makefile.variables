@@ -14,6 +14,9 @@
 # which is then reflected in the package NVR.
 ADD_COMMITID_TO_VERSION ?=
 
+# This is the brew/cbs scratch build target.
+AUTOMOTIVE_BUILD_TARGET ?=
+
 # This sets the incremental build version value in the rpm NVR.  If unset, this
 # defaults to RHEL_RELEASE from Makefile.rhelver
 BUILD ?=

@@ -79,10 +79,10 @@ SPECCHANGELOG=$(SPECPACKAGE_NAME).$(CHANGELOG_EXT)
 ARCH_LIST=aarch64 ppc64le s390x x86_64 riscv64
 
 # save some user selectable values to know later if we can override them
-DISTRO_USERDEF=$(DISTRO)
-DIST_USERDEF=$(DIST)
-BUILD_PROFILE_USERDEF=$(BUILD_PROFILE)
-BUILD_TARGET_USERDEF=$(BUILD_TARGET)
+DISTRO_USERDEF:=$(DISTRO)
+DIST_USERDEF:=$(DIST)
+BUILD_PROFILE_USERDEF:=$(BUILD_PROFILE)
+BUILD_TARGET_USERDEF:=$(BUILD_TARGET)
 
 ifndef DIST
   DIST = $(shell $(RPMBUILD) --eval '%{?dist}')
@@ -299,6 +299,8 @@ else ifeq ("$(DISTRO)", "centos")
   endif
   ifndef BUILD_TARGET
     BUILD_TARGET:=c$(RHEL_MAJOR)s-candidate
+    # The CentOS Stream equivalent for automotive is AutoSD built out of CBS
+    AUTOMOTIVE_BUILD_TARGET = autosd$(RHEL_MAJOR)s-packages-main-el$(RHEL_MAJOR)s
   endif
   SPECTARFILE_RELEASE=$(BASEVERSION)$(DIST)
   SPECKABIVERSION=$(BASEVERSION)$(DIST)
@@ -315,6 +317,7 @@ else
       # This value is used by the dist[g]-targets.  Changing this value has significant
       # consequences for all of RHEL kernel engineering.
       BUILD_TARGET:=rhel-$(RHEL_MAJOR)-newest-test-pesign
+      AUTOMOTIVE_BUILD_TARGET = rhivos-$(AUTOMOTIVE_MAJOR)-newest-test-pesign
     endif
   endif
   ifeq ("$(DIST)", ".eln")
@@ -894,6 +897,30 @@ _dist-brew _dist-koji: _dist-%: dist-vr-check dist-srpm
 
 _distg-brew _distg-koji: _distg-%: dist-vr-check
 	$* $(BUILD_PROFILE) build $(BUILD_FLAGS) --scratch $(BUILD_TARGET) "$(RHGITURL)?redhat/koji#$(RHGITCOMMIT)"
+
+dist-cbs-automotive: ##build Create a kernel-automotive SRPM and then call cbs to build the created SRPM.
+dist-cbs-automotive: SPECPACKAGE_NAME := kernel-automotive
+dist-cbs-automotive: DISTRO=$(if $(DISTRO_USERDEF),$(DISTRO_USERDEF),centos)
+dist-cbs-automotive: DIST=$(if $(DIST_USERDEF),$(DIST_USERDEF),.el$(RHEL_MAJOR)iv)
+dist-cbs-automotive: BUILD_PROFILE=$(if $(BUILD_PROFILE_USERDEF),$(BUILD_PROFILE_USERDEF))
+dist-cbs-automotive: BUILD_TARGET=$(if $(BUILD_TARGET_USERDEF),$(BUILD_TARGET_USERDEF))
+dist-cbs-automotive:
+	$(MAKE) _$@
+
+_dist-cbs-automotive: dist-srpm-automotive
+	cbs build $(BUILD_FLAGS) --scratch $(AUTOMOTIVE_BUILD_TARGET) $(SRPMS)/$(RELEASETAG)$(DIST).src.rpm
+
+dist-brew-automotive: ##build Create a kernel-automotive SRPM and then call brew to build the created SRPM.
+dist-brew-automotive: SPECPACKAGE_NAME := kernel-automotive
+dist-brew-automotive: DISTRO=$(if $(DISTRO_USERDEF),$(DISTRO_USERDEF),rhel)
+dist-brew-automotive: DIST=$(if $(DIST_USERDEF),$(DIST_USERDEF),.el$(RHEL_MAJOR)iv)
+dist-brew-automotive: BUILD_PROFILE=$(if $(BUILD_PROFILE_USERDEF),$(BUILD_PROFILE_USERDEF))
+dist-brew-automotive: BUILD_TARGET=$(if $(BUILD_TARGET_USERDEF),$(BUILD_TARGET_USERDEF))
+dist-brew-automotive:
+	$(MAKE) _$@
+
+_dist-brew-automotive: dist-srpm-automotive
+	brew build $(BUILD_FLAGS) --scratch $(AUTOMOTIVE_BUILD_TARGET) $(SRPMS)/$(RELEASETAG)$(DIST).src.rpm
 
 dist-git-test: export RH_DIST_GIT_TEST="1"
 dist-git-test: dist-git
