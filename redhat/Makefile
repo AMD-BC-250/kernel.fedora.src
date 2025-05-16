@@ -294,6 +294,8 @@ ifeq ("$(DISTRO)", "fedora")
   RHPKG_BIN:=fedpkg
 else ifeq ("$(DISTRO)", "centos")
   RHDISTGIT_BRANCH=c$(RHEL_MAJOR)s
+  # This is a CentOS SIG dist-git for AutoSD rather than for CentOS Stream.
+  AUTOMOTIVE_DISTGIT_BRANCH=c$(RHEL_MAJOR)s-sig-automotive-main
   ifndef BUILD_PROFILE
     BUILD_PROFILE:= -p stream
   endif
@@ -308,8 +310,12 @@ else ifeq ("$(DISTRO)", "centos")
   DISTBASEVERSION=$(BASEVERSION)$(DIST)
   PATCHLIST_URL:=none
   RHPKG_BIN:=centpkg
+  AUTOMOTIVE_RHPKG_BIN:=centpkg-sig
+  AUTOMOTIVE_DISTGIT_NS:=automotive/rpms/
+  AUTOMOTIVE_RHPKG_OPTS:=--config $(REDHAT)/automotive-centpkg-sig.conf
 else
   RHDISTGIT_BRANCH:=rhel-$(RHEL_MAJOR).$(RHEL_MINOR).0
+  AUTOMOTIVE_DISTGIT_BRANCH=rhivos-$(AUTOMOTIVE_MAJOR).$(AUTOMOTIVE_MINOR).0
   ifndef BUILD_TARGET
     ifeq ("$(DIST)", ".eln")
       BUILD_TARGET:=eln
@@ -333,6 +339,9 @@ else
   endif
   PATCHLIST_URL:=none
   RHPKG_BIN:=rhpkg
+  AUTOMOTIVE_RHPKG_BIN:=rhpkg
+  AUTOMOTIVE_DISTGIT_NS:=
+  AUTOMOTIVE_RHPKG_OPTS:=
 endif
 
 TARFILE=linux-$(SPECTARFILE_RELEASE).tar.xz
@@ -925,9 +934,27 @@ _dist-brew-automotive: dist-srpm-automotive
 dist-git-test: export RH_DIST_GIT_TEST="1"
 dist-git-test: dist-git
 
+dist-git-automotive-test: export RH_DIST_GIT_TEST="1"
+dist-git-automotive-test: dist-git-automotive
+
 dist-git: dist-srpm $(KABI_TARBALL) $(KABIDW_TARBALL) dist-check-release
 	@if [ -z "$(RHDISTGIT_BRANCH)" ]; then \
 		echo "RHDISTGIT_BRANCH is unset"; \
+		exit 1; \
+	fi
+	$(REDHAT)/scripts/rh-dist-git.sh
+
+# kernel-automotive uses a separate dist-git
+dist-git-automotive: SPECPACKAGE_NAME := kernel-automotive
+dist-git-automotive: DIST := .el$(RHEL_MAJOR)iv
+dist-git-automotive: RHDISTGIT_BRANCH := $(AUTOMOTIVE_DISTGIT_BRANCH)
+dist-git-automotive: RHPKG_BIN := $(AUTOMOTIVE_RHPKG_BIN)
+dist-git-automotive: RHPKG_OPTS := $(AUTOMOTIVE_RHPKG_OPTS)
+dist-git-automotive: RHPKG_NS := $(AUTOMOTIVE_DISTGIT_NS)
+dist-git-automotive: dist-srpm-automotive dist-check-release
+dist-git-automotive:
+	@if [ -z "$(AUTOMOTIVE_DISTGIT_BRANCH)" ]; then \
+		echo "AUTOMOTIVE_DISTGIT_BRANCH is unset"; \
 		exit 1; \
 	fi
 	$(REDHAT)/scripts/rh-dist-git.sh
