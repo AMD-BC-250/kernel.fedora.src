@@ -908,7 +908,7 @@ BuildRequires: redhat-sb-certs >= 9.4-0.1
 Source0: linux-%{tarfile_release}.tar.xz
 
 Source1: Makefile.rhelver
-Source2: kernel.changelog
+Source2: %{package_name}.changelog
 
 Source10: redhatsecurebootca5.cer
 Source13: redhatsecureboot501.cer
@@ -961,11 +961,8 @@ Source22: filtermods.py
 %define modsign_cmd %{SOURCE21}
 
 %if 0%{?include_rhel}
-Source23: x509.genkey.rhel
-
 Source24: %{name}-aarch64-rhel.config
 Source25: %{name}-aarch64-debug-rhel.config
-
 Source27: %{name}-ppc64le-rhel.config
 Source28: %{name}-ppc64le-debug-rhel.config
 Source29: %{name}-s390x-rhel.config
@@ -973,14 +970,15 @@ Source30: %{name}-s390x-debug-rhel.config
 Source31: %{name}-s390x-zfcpdump-rhel.config
 Source32: %{name}-x86_64-rhel.config
 Source33: %{name}-x86_64-debug-rhel.config
-
-Source34: def_variants.yaml.rhel
-
-Source41: x509.genkey.centos
 # ARM64 64K page-size kernel config
 Source42: %{name}-aarch64-64k-rhel.config
 Source43: %{name}-aarch64-64k-debug-rhel.config
+%endif
 
+%if %{include_rhel} || %{include_automotive}
+Source23: x509.genkey.rhel
+Source34: def_variants.yaml.rhel
+Source41: x509.genkey.centos
 %endif
 
 %if 0%{?include_fedora}
@@ -1084,7 +1082,6 @@ Source487: %{name}-riscv64-rt-debug-fedora.config
 %endif
 
 %if %{include_automotive}
-# automotive config files
 Source488: %{name}-aarch64-automotive-rhel.config
 Source489: %{name}-aarch64-automotive-debug-rhel.config
 Source490: %{name}-x86_64-automotive-rhel.config
