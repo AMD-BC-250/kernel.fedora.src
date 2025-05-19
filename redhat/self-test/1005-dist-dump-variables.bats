@@ -24,7 +24,7 @@ load test-lib.bash
 @test "eln BUILD_TARGET test" {
 	unset BUILD_TARGET
 	unset DISTRO
-	bt=$(make DIST=".eln" dist-dump-variables | grep "BUILD_TARGET=" | cut -d"=" -f2)
+	bt=$(make DIST=".eln" dist-dump-variables | grep "^BUILD_TARGET=" | cut -d"=" -f2)
 	run [ "$bt" = "eln" ]
 	check_status
 }
