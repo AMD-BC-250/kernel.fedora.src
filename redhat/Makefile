@@ -590,10 +590,12 @@ rh-configs: dist-rhel-configs
 automotive-configs-pre:
 	@cp $(REDHAT)/configs/priority.$(FLAVOR) $(REDHAT)/configs/priority.$(FLAVOR).bak
 	@sed -i '/^#\|^ORDER\|^\(x86_64\|aarch64\)-automotive/!d' $(REDHAT)/configs/priority.$(FLAVOR)
+	@sed -i 's/^\([^=]*\)-automotive/\1/' $(REDHAT)/configs/priority.$(FLAVOR)
 automotive-configs-post:
 	@mv $(REDHAT)/configs/priority.$(FLAVOR).bak $(REDHAT)/configs/priority.$(FLAVOR)
 
 dist-automotive-configs: ##build build only the automotive configs
+dist-automotive-configs: SPECPACKAGE_NAME := kernel-automotive
 dist-automotive-configs: FLAVOR = rhel
 dist-automotive-configs: automotive-configs-pre .WAIT dist-configs .WAIT automotive-configs-post
 
