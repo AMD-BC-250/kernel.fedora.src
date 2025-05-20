@@ -1,3 +1,7 @@
+* Tue May 20 2025 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.15.0-0.rc7.58]
+- powerpc: Fix struct termio related ioctl macros (Madhavan Srinivasan)
+Resolves: 
+
 * Mon May 19 2025 Fedora Kernel Team <kernel-team@fedoraproject.org> [6.15.0-0.rc7.57]
 - redhat/configs: remove CRC16 config files (Scott Weaver)
 - Linux v6.15.0-0.rc7
