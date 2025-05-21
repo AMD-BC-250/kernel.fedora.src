@@ -69,13 +69,13 @@ ARCHCONFIG := $(shell uname -m | sed -e s/x86_64/X86_64/ \
 				     -e s/s390x/S390/ -e s/ppc.*/PPC/ )
 
 # rpm information
-SPECFILE:=$(SPECPACKAGE_NAME).spec
+SPECFILE=$(SPECPACKAGE_NAME).spec
 RPM:=$(REDHAT)/rpm
 SRPMS:=$(RPM)/SRPMS
 SOURCES:=$(RPM)/SOURCES
 TESTPATCH:=$(REDHAT)/linux-kernel-test.patch
 CHANGELOG_EXT:=changelog-$(RHEL_MAJOR).$(RHEL_MINOR)
-SPECCHANGELOG:=$(SPECPACKAGE_NAME).$(CHANGELOG_EXT)
+SPECCHANGELOG=$(SPECPACKAGE_NAME).$(CHANGELOG_EXT)
 ARCH_LIST=aarch64 ppc64le s390x x86_64 riscv64
 
 # save some user selectable values to know later if we can override them
@@ -85,7 +85,7 @@ BUILD_PROFILE_USERDEF:=$(BUILD_PROFILE)
 BUILD_TARGET_USERDEF:=$(BUILD_TARGET)
 
 ifndef DIST
-  DIST := $(shell $(RPMBUILD) --eval '%{?dist}')
+  DIST = $(shell $(RPMBUILD) --eval '%{?dist}')
 endif
 
 ifndef DISTRO
@@ -146,29 +146,29 @@ endif
 ifneq ($(SPECKEXTRAVERSION),)
   UPSTREAMBUILD:=0$(shell echo $(SPECKEXTRAVERSION) | sed -e s/-/./).
   ifeq ($(SPECKSUBLEVEL),0)
-    UPSTREAM_TARBALL_NAME:=$(SPECKVERSION).$(SPECKPATCHLEVEL)$(SPECKEXTRAVERSION)
+    UPSTREAM_TARBALL_NAME=$(SPECKVERSION).$(SPECKPATCHLEVEL)$(SPECKEXTRAVERSION)
   else
-    UPSTREAM_TARBALL_NAME:=$(SPECKVERSION).$(SPECKPATCHLEVEL).$(SPECKSUBLEVEL)$(SPECKEXTRAVERSION)
+    UPSTREAM_TARBALL_NAME=$(SPECKVERSION).$(SPECKPATCHLEVEL).$(SPECKSUBLEVEL)$(SPECKEXTRAVERSION)
     # stable-rc's are not tagged
     STABLERC_MARKER:=$(shell $(GIT) rev-parse -q --verify origin/$(UPSTREAM_BRANCH) | cut -c 1-12 || \
             $(GIT) rev-parse -q --verify $(UPSTREAM_BRANCH) | cut -c 1-12)
   endif
 else
   ifeq ($(SPECKSUBLEVEL),0)
-    UPSTREAM_TARBALL_NAME:=$(SPECKVERSION).$(SPECKPATCHLEVEL)
+    UPSTREAM_TARBALL_NAME=$(SPECKVERSION).$(SPECKPATCHLEVEL)
   else
     # MARKER (and UPSTREAM_TARBALL_NAME) must use SPECKVERSION,
     # SPECKPATCHLEVEL, and SPECKSUBLEVEL from the top-level kernel makefile as
     # opposed to any adjusted version for snapshotting.  IOW, these variables are
     # *NOT* equivalent to the SPECVERSION variable.
-    UPSTREAM_TARBALL_NAME:=$(SPECKVERSION).$(SPECKPATCHLEVEL).$(SPECKSUBLEVEL)
+    UPSTREAM_TARBALL_NAME=$(SPECKVERSION).$(SPECKPATCHLEVEL).$(SPECKSUBLEVEL)
   endif
   UPSTREAMBUILD:=
 endif
 ifneq ($(STABLERC_MARKER),)
-  MARKER:=$(STABLERC_MARKER)
+  MARKER=$(STABLERC_MARKER)
 else
-  MARKER:=v$(UPSTREAM_TARBALL_NAME)
+  MARKER=v$(UPSTREAM_TARBALL_NAME)
 endif
 
 # If VERSION_ON_UPSTREAM is set, the versioning of the rpm package is based
@@ -196,7 +196,7 @@ ifneq ("$(wildcard $(TOPDIR)/localversion-next)", "")
   endif
   LINUXNEXT_VERSION:=$(shell echo $(MARKER) | sed 's!next-!!')
   UPSTREAMBUILD:=0.0.next.$(LINUXNEXT_VERSION).
-  UPSTREAM_TARBALL_NAME:=$(MARKER)
+  UPSTREAM_TARBALL_NAME=$(MARKER)
 else ifeq ($(VERSION_ON_UPSTREAM),1)
   # UPSTREAM_BRANCH is expected to track mainline.
   ifeq ($(UPSTREAM),)
@@ -264,16 +264,16 @@ endif
 # Gemini kernels override RPM NVR to:
 # $(SPECPACKAGE_NAME)-$(SPECRVERSION).$(SPECRPATCHLEVEL)-$(SPECBUILD)                           $(DIST)
 #
-SPECBUILD:=$(UPSTREAMBUILD)$(BUILD)$(DISTLOCALVERSION)
-SPECVERSION:=$(SPECKVERSION).$(SPECKPATCHLEVEL).$(SPECKSUBLEVEL)
+SPECBUILD=$(UPSTREAMBUILD)$(BUILD)$(DISTLOCALVERSION)
+SPECVERSION=$(SPECKVERSION).$(SPECKPATCHLEVEL).$(SPECKSUBLEVEL)
 ifeq ($(SPECGEMINI),0)
-  SPECRPMVERSION:=$(SPECKVERSION).$(SPECKPATCHLEVEL).$(SPECKSUBLEVEL)
+  SPECRPMVERSION=$(SPECKVERSION).$(SPECKPATCHLEVEL).$(SPECKSUBLEVEL)
 else
-  SPECRPMVERSION:=$(SPECRVERSION).$(SPECRPATCHLEVEL)
+  SPECRPMVERSION=$(SPECRVERSION).$(SPECRPATCHLEVEL)
 endif
-BASEVERSION:=$(SPECRPMVERSION)-$(SPECBUILD)
-RELEASETAG:=$(SPECPACKAGE_NAME)-$(BASEVERSION)
-SRPM:=$(SRPMS)/$(RELEASETAG)$(DIST).src.rpm
+BASEVERSION=$(SPECRPMVERSION)-$(SPECBUILD)
+RELEASETAG=$(SPECPACKAGE_NAME)-$(BASEVERSION)
+SRPM=$(SRPMS)/$(RELEASETAG)$(DIST).src.rpm
 
 #
 # This conditional statement is where fedora, centos, and other (aka RHEL)
@@ -287,27 +287,35 @@ ifeq ("$(DISTRO)", "fedora")
   # The Fedora tarfile name is based on an upstream tag as users may
   # replace the tarball from one with upstream, rebuild, and then deploy
   # without changing anything else in the specfile.
-  SPECTARFILE_RELEASE:=$(UPSTREAM_TARBALL_NAME)
-  SPECKABIVERSION:=$(SPECRPMVERSION)
-  DISTRELEASETAG:=$(RELEASETAG)
-  DISTBASEVERSION:=$(BASEVERSION)
+  SPECTARFILE_RELEASE=$(UPSTREAM_TARBALL_NAME)
+  SPECKABIVERSION=$(SPECRPMVERSION)
+  DISTRELEASETAG=$(RELEASETAG)
+  DISTBASEVERSION=$(BASEVERSION)
   RHPKG_BIN:=fedpkg
 else ifeq ("$(DISTRO)", "centos")
-  RHDISTGIT_BRANCH:=c$(RHEL_MAJOR)s
+  RHDISTGIT_BRANCH=c$(RHEL_MAJOR)s
+  # This is a CentOS SIG dist-git for AutoSD rather than for CentOS Stream.
+  AUTOMOTIVE_DISTGIT_BRANCH=c$(RHEL_MAJOR)s-sig-automotive-main
   ifndef BUILD_PROFILE
     BUILD_PROFILE:= -p stream
   endif
   ifndef BUILD_TARGET
     BUILD_TARGET:=c$(RHEL_MAJOR)s-candidate
+    # The CentOS Stream equivalent for automotive is AutoSD built out of CBS
+    AUTOMOTIVE_BUILD_TARGET = autosd$(RHEL_MAJOR)s-packages-main-el$(RHEL_MAJOR)s
   endif
-  SPECTARFILE_RELEASE:=$(BASEVERSION)$(DIST)
-  SPECKABIVERSION:=$(BASEVERSION)$(DIST)
-  DISTRELEASETAG:=$(RELEASETAG)$(DIST)
-  DISTBASEVERSION:=$(BASEVERSION)$(DIST)
+  SPECTARFILE_RELEASE=$(BASEVERSION)$(DIST)
+  SPECKABIVERSION=$(BASEVERSION)$(DIST)
+  DISTRELEASETAG=$(RELEASETAG)$(DIST)
+  DISTBASEVERSION=$(BASEVERSION)$(DIST)
   PATCHLIST_URL:=none
   RHPKG_BIN:=centpkg
+  AUTOMOTIVE_RHPKG_BIN:=centpkg-sig
+  AUTOMOTIVE_DISTGIT_NS:=automotive/rpms/
+  AUTOMOTIVE_RHPKG_OPTS:=--config $(REDHAT)/automotive-centpkg-sig.conf
 else
   RHDISTGIT_BRANCH:=rhel-$(RHEL_MAJOR).$(RHEL_MINOR).0
+  AUTOMOTIVE_DISTGIT_BRANCH=rhivos-$(AUTOMOTIVE_MAJOR).$(AUTOMOTIVE_MINOR).0
   ifndef BUILD_TARGET
     ifeq ("$(DIST)", ".eln")
       BUILD_TARGET:=eln
@@ -315,29 +323,33 @@ else
       # This value is used by the dist[g]-targets.  Changing this value has significant
       # consequences for all of RHEL kernel engineering.
       BUILD_TARGET:=rhel-$(RHEL_MAJOR)-newest-test-pesign
+      AUTOMOTIVE_BUILD_TARGET = rhivos-$(AUTOMOTIVE_MAJOR)-newest-test-pesign
     endif
   endif
   ifeq ("$(DIST)", ".eln")
-    DISTRELEASETAG:=$(RELEASETAG)
-    DISTBASEVERSION:=$(BASEVERSION)
-    SPECTARFILE_RELEASE:=$(BASEVERSION)
-    SPECKABIVERSION:=$(BASEVERSION)
+    DISTRELEASETAG=$(RELEASETAG)
+    DISTBASEVERSION=$(BASEVERSION)
+    SPECTARFILE_RELEASE=$(BASEVERSION)
+    SPECKABIVERSION=$(BASEVERSION)
   else
-    DISTRELEASETAG:=$(RELEASETAG)$(DIST)
-    DISTBASEVERSION:=$(BASEVERSION)$(DIST)
-    SPECTARFILE_RELEASE:=$(BASEVERSION)$(DIST)
-    SPECKABIVERSION:=$(BASEVERSION)$(DIST)
+    DISTRELEASETAG=$(RELEASETAG)$(DIST)
+    DISTBASEVERSION=$(BASEVERSION)$(DIST)
+    SPECTARFILE_RELEASE=$(BASEVERSION)$(DIST)
+    SPECKABIVERSION=$(BASEVERSION)$(DIST)
   endif
   PATCHLIST_URL:=none
   RHPKG_BIN:=rhpkg
+  AUTOMOTIVE_RHPKG_BIN:=rhpkg
+  AUTOMOTIVE_DISTGIT_NS:=
+  AUTOMOTIVE_RHPKG_OPTS:=
 endif
 
-TARFILE:=linux-$(SPECTARFILE_RELEASE).tar.xz
-TARBALL:=$(REDHAT)/$(TARFILE)
+TARFILE=linux-$(SPECTARFILE_RELEASE).tar.xz
+TARBALL=$(REDHAT)/$(TARFILE)
 
-KABI_TARBALL:=$(REDHAT)/kernel-abi-stablelists-$(SPECKABIVERSION).tar.xz
-KABIDW := $(REDHAT)/kabi-dwarf
-KABIDW_TARBALL:=$(REDHAT)/kernel-kabi-dw-$(SPECKABIVERSION).tar.xz
+KABI_TARBALL=$(REDHAT)/kernel-abi-stablelists-$(SPECKABIVERSION).tar.xz
+KABIDW = $(REDHAT)/kabi-dwarf
+KABIDW_TARBALL=$(REDHAT)/kernel-kabi-dw-$(SPECKABIVERSION).tar.xz
 
 # load Makefile variable settings from user-specified configuration file,
 # ~/.rhpkg.mk or $TOPDIR/.rhpkg.mk
@@ -574,6 +586,19 @@ dist-rhel-configs: FLAVOR = rhel
 dist-rhel-configs: dist-configs
 rh-configs: dist-rhel-configs
 
+# although automotive is not a flavor we want to treat it like it has it's own config priority file
+automotive-configs-pre:
+	@cp $(REDHAT)/configs/priority.$(FLAVOR) $(REDHAT)/configs/priority.$(FLAVOR).bak
+	@sed -i '/^#\|^ORDER\|^\(x86_64\|aarch64\)-automotive/!d' $(REDHAT)/configs/priority.$(FLAVOR)
+	@sed -i 's/^\([^=]*\)-automotive/\1/' $(REDHAT)/configs/priority.$(FLAVOR)
+automotive-configs-post:
+	@mv $(REDHAT)/configs/priority.$(FLAVOR).bak $(REDHAT)/configs/priority.$(FLAVOR)
+
+dist-automotive-configs: ##build build only the automotive configs
+dist-automotive-configs: SPECPACKAGE_NAME := kernel-automotive
+dist-automotive-configs: FLAVOR = rhel
+dist-automotive-configs: automotive-configs-pre .WAIT dist-configs .WAIT automotive-configs-post
+
 dist-configs-check: dist-configs-prep
 	+cd $(REDHAT)/configs; ./process_configs.sh $(PROCESS_CONFIGS_CHECK_OPTS) "" ""
 
@@ -725,8 +750,8 @@ sources-rh: $(TARBALL) $(KABI_TARBALL) $(KABIDW_TARBALL) generate-testpatch-tmp 
 		kernel-local \
 		dracut-virt.conf \
 		$(SOURCES)/
-	@cat $$(ls -1 $(SPECPACKAGE_NAME).changelog-* | sort -V -r) \
-		> $(SOURCES)/kernel.changelog
+	@cat $$(ls -1 kernel.changelog-* | sort -V -r) \
+		> $(SOURCES)/$(SPECPACKAGE_NAME).changelog
 	cp keys/redhatsecureboot{501,ca5}.cer $(SOURCES)/;
 	@for KABIARCH in $(ARCH_LIST); do \
 		cp kabi/Module.kabi_$$KABIARCH $(SOURCES)/; \
@@ -751,13 +776,25 @@ dist-all-rpms: RPMBUILDOPTS=--target $(MACH) -ba
 dist-all-rpms: dist-sources do-rpmbuild
 
 dist-srpm: ##build Create a source RPM and put it into the redhat/rpm/SRPMS/ directory.  See the dist-brew target for available options.
-dist-srpm: RPMBUILDOPTS=--nodeps -bs
+dist-srpm: RPMBUILDOPTS+=--nodeps -bs
 dist-srpm: dist-sources do-rpmbuild
 
 dist-srpm-gcov: ##build Create a source RPM with gcov enabled and put it into the redhat/rpm/SRPMS/ directory.
 dist-srpm-gcov: DISTLOCALVERSION=.gcov
 dist-srpm-gcov: BUILDOPTS+=+gcov
 dist-srpm-gcov: dist-srpm
+
+dist-srpm-automotive: ##build Create a source RPM for kernel-automotive and put it into the redhat/rpm/SRPMS/ directory.
+dist-srpm-automotive: SPECPACKAGE_NAME := kernel-automotive
+dist-srpm-automotive: DIST := .el$(RHEL_MAJOR)iv
+dist-srpm-automotive: BUILDOPTS += +automotiveonly
+dist-srpm-automotive: INCLUDE_FEDORA_FILES := 0
+dist-srpm-automotive: INCLUDE_RHEL_FILES := 0
+dist-srpm-automotive: INCLUDE_RT_FILES := 0
+dist-srpm-automotive: INCLUDE_AUTOMOTIVE_FILES := 1
+dist-srpm-automotive: FLAVOR := rhel
+dist-srpm-automotive: automotive-configs-pre .WAIT dist-srpm .WAIT automotive-configs-post
+	@rm -f $(REDHAT)/kernel-automotive*
 
 dist-rpms: ##build Create the binary RPMS for the kernel. See the dist-brew target for available options.
 dist-rpms: RPMBUILDOPTS=--target $(MACH) -bb
@@ -872,12 +909,54 @@ _dist-brew _dist-koji: _dist-%: dist-vr-check dist-srpm
 _distg-brew _distg-koji: _distg-%: dist-vr-check
 	$* $(BUILD_PROFILE) build $(BUILD_FLAGS) --scratch $(BUILD_TARGET) "$(RHGITURL)?redhat/koji#$(RHGITCOMMIT)"
 
+dist-cbs-automotive: ##build Create a kernel-automotive SRPM and then call cbs to build the created SRPM.
+dist-cbs-automotive: SPECPACKAGE_NAME := kernel-automotive
+dist-cbs-automotive: DISTRO=$(if $(DISTRO_USERDEF),$(DISTRO_USERDEF),centos)
+dist-cbs-automotive: DIST=$(if $(DIST_USERDEF),$(DIST_USERDEF),.el$(RHEL_MAJOR)iv)
+dist-cbs-automotive: BUILD_PROFILE=$(if $(BUILD_PROFILE_USERDEF),$(BUILD_PROFILE_USERDEF))
+dist-cbs-automotive: BUILD_TARGET=$(if $(BUILD_TARGET_USERDEF),$(BUILD_TARGET_USERDEF))
+dist-cbs-automotive:
+	$(MAKE) _$@
+
+_dist-cbs-automotive: dist-srpm-automotive
+	cbs build $(BUILD_FLAGS) --scratch $(AUTOMOTIVE_BUILD_TARGET) $(SRPMS)/$(RELEASETAG)$(DIST).src.rpm
+
+dist-brew-automotive: ##build Create a kernel-automotive SRPM and then call brew to build the created SRPM.
+dist-brew-automotive: SPECPACKAGE_NAME := kernel-automotive
+dist-brew-automotive: DISTRO=$(if $(DISTRO_USERDEF),$(DISTRO_USERDEF),rhel)
+dist-brew-automotive: DIST=$(if $(DIST_USERDEF),$(DIST_USERDEF),.el$(RHEL_MAJOR)iv)
+dist-brew-automotive: BUILD_PROFILE=$(if $(BUILD_PROFILE_USERDEF),$(BUILD_PROFILE_USERDEF))
+dist-brew-automotive: BUILD_TARGET=$(if $(BUILD_TARGET_USERDEF),$(BUILD_TARGET_USERDEF))
+dist-brew-automotive:
+	$(MAKE) _$@
+
+_dist-brew-automotive: dist-srpm-automotive
+	brew build $(BUILD_FLAGS) --scratch $(AUTOMOTIVE_BUILD_TARGET) $(SRPMS)/$(RELEASETAG)$(DIST).src.rpm
+
 dist-git-test: export RH_DIST_GIT_TEST="1"
 dist-git-test: dist-git
+
+dist-git-automotive-test: export RH_DIST_GIT_TEST="1"
+dist-git-automotive-test: dist-git-automotive
 
 dist-git: dist-srpm $(KABI_TARBALL) $(KABIDW_TARBALL) dist-check-release
 	@if [ -z "$(RHDISTGIT_BRANCH)" ]; then \
 		echo "RHDISTGIT_BRANCH is unset"; \
+		exit 1; \
+	fi
+	$(REDHAT)/scripts/rh-dist-git.sh
+
+# kernel-automotive uses a separate dist-git
+dist-git-automotive: SPECPACKAGE_NAME := kernel-automotive
+dist-git-automotive: DIST := .el$(RHEL_MAJOR)iv
+dist-git-automotive: RHDISTGIT_BRANCH := $(AUTOMOTIVE_DISTGIT_BRANCH)
+dist-git-automotive: RHPKG_BIN := $(AUTOMOTIVE_RHPKG_BIN)
+dist-git-automotive: RHPKG_OPTS := $(AUTOMOTIVE_RHPKG_OPTS)
+dist-git-automotive: RHPKG_NS := $(AUTOMOTIVE_DISTGIT_NS)
+dist-git-automotive: dist-srpm-automotive dist-check-release
+dist-git-automotive:
+	@if [ -z "$(AUTOMOTIVE_DISTGIT_BRANCH)" ]; then \
+		echo "AUTOMOTIVE_DISTGIT_BRANCH is unset"; \
 		exit 1; \
 	fi
 	$(REDHAT)/scripts/rh-dist-git.sh
