@@ -714,7 +714,7 @@ Release: %{pkg_release}
 %if 0%{?fedora}
 ExclusiveArch: noarch x86_64 s390x aarch64 ppc64le riscv64
 %else
-ExclusiveArch: noarch i386 i686 x86_64 s390x aarch64 ppc64le
+ExclusiveArch: noarch i386 i686 x86_64 s390x aarch64 ppc64le riscv64
 %endif
 ExclusiveOS: Linux
 %ifnarch %{nobuildarches}
@@ -857,6 +857,16 @@ BuildRequires: binutils-%{_build_arch}-linux-gnu, gcc-%{_build_arch}-linux-gnu
 # debugedit-5.1-5 in F42 added support to override tools with target versions.
 %undefine _include_gdb_index
 %endif
+
+%if 0%{?rhel}%{?centos}
+%ifarch riscv64
+# Temporary workaround to avoid using find-debuginfo and gdb.minimal.
+# The current c10s version of gdb-minimal (14.2-4.el10) crashes when given some
+# riscv64 kernel modules (see RHEL-91586). Not building the gdb index avoids
+# breaking CI for now.
+%undefine _include_gdb_index
+%endif
+%endif
 %endif
 
 # These below are required to build man pages
@@ -980,6 +990,9 @@ Source41: x509.genkey.centos
 # ARM64 64K page-size kernel config
 Source42: %{name}-aarch64-64k-rhel.config
 Source43: %{name}-aarch64-64k-debug-rhel.config
+
+Source44: %{name}-riscv64-rhel.config
+Source45: %{name}-riscv64-debug-rhel.config
 
 %endif
 
@@ -2270,6 +2283,7 @@ BuildKernel() {
 
 %ifarch aarch64 riscv64
     %{log_msg "Build dtb kernel"}
+    mkdir -p $RPM_BUILD_ROOT/%{image_install_path}/dtb-$KernelVer
     %{make} ARCH=$Arch dtbs INSTALL_DTBS_PATH=$RPM_BUILD_ROOT/%{image_install_path}/dtb-$KernelVer
     %{make} ARCH=$Arch dtbs_install INSTALL_DTBS_PATH=$RPM_BUILD_ROOT/%{image_install_path}/dtb-$KernelVer
     cp -r $RPM_BUILD_ROOT/%{image_install_path}/dtb-$KernelVer $RPM_BUILD_ROOT/lib/modules/$KernelVer/dtb
