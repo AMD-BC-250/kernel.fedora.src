@@ -1,1 +1,1 @@
-# CONFIG_PCIE_QCOM is not set
+CONFIG_PCIE_QCOM=y
